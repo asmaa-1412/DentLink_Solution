@@ -1,4 +1,7 @@
-namespace DentLink
+using DentLink.DataAccessLayer.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace DentLink.PresentionLayer
 {
     public class Program
     {
@@ -8,6 +11,11 @@ namespace DentLink
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             var app = builder.Build();
 

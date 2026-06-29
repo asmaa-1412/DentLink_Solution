@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentLink", "DentLink\DentLink.csproj", "{65B1AA71-CC2E-407A-AC9E-9C31986AD0CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentLink.PresentionLayer", "DentLink\DentLink.PresentionLayer.csproj", "{65B1AA71-CC2E-407A-AC9E-9C31986AD0CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentLink.BusinessLogicLayer", "DentLink.BusinessLogicLayer\DentLink.BusinessLogicLayer.csproj", "{FDB27D80-A248-4721-95D1-0D2ABF8EAA90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentLink.DataAccessLayer", "DentLink.DataAccessLayer\DentLink.DataAccessLayer.csproj", "{1DCECEF3-9C7E-443D-9FC0-9DE8606AF06F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{65B1AA71-CC2E-407A-AC9E-9C31986AD0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65B1AA71-CC2E-407A-AC9E-9C31986AD0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65B1AA71-CC2E-407A-AC9E-9C31986AD0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDB27D80-A248-4721-95D1-0D2ABF8EAA90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB27D80-A248-4721-95D1-0D2ABF8EAA90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB27D80-A248-4721-95D1-0D2ABF8EAA90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB27D80-A248-4721-95D1-0D2ABF8EAA90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DCECEF3-9C7E-443D-9FC0-9DE8606AF06F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DCECEF3-9C7E-443D-9FC0-9DE8606AF06F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DCECEF3-9C7E-443D-9FC0-9DE8606AF06F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DCECEF3-9C7E-443D-9FC0-9DE8606AF06F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
