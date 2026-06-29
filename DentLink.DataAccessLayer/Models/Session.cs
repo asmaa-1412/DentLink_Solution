@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using DentLink.DataAccessLayer.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DentLink.DataAccessLayer.Models
 {
@@ -13,13 +13,20 @@ namespace DentLink.DataAccessLayer.Models
         [ForeignKey(nameof(CaseRequest))]
         public int CaseRequestId { get; set; }
 
-        public DateTime SessionStart { get; set; }
+        [Required]
+        public DateTime SessionDate { get; set; }
 
-        public DateTime? SessionEnd { get; set; }
+        [Required]
+        [StringLength(30)]
+        public string Status { get; set; } = "confirmed"; // (confirmed, in progress, completed)
 
-        public bool PatientArrived { get; set; } = false;
+        public bool IsPatientArrived { get; set; } = false; // بيتحول True لما تدوسي "Confirm Patient Arrived"
+        public bool IsCompleted { get; set; } = false;      // بيتحول True لما تدوسي "Complete Session"
 
-        // Navigation
+        public DateTime? ActualStartTime { get; set; }
+        public DateTime? ActualEndTime { get; set; }
+
+        // --- Navigation Properties ---
         public CaseRequest CaseRequest { get; set; }
     }
 }

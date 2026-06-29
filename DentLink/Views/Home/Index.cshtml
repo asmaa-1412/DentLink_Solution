@@ -1,8 +1,106 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome to DentLink";
+    Layout = "_Layout"; // أو سيبيه لو فيه ليف آوت جاهز
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- الكانتينر الرئيسي بالخلفية الزرقاء المتدرجة زي الصورة بالظبط -->
+<div class="position-relative overflow-hidden text-white d-flex align-items-center"
+     style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); min-height: 90vh; padding: 60px 0;">
+
+    <div class="container position-relative z-index-2">
+        <div class="row align-items-center g-5">
+
+            <!-- الجزء الشمال: النصوص والزراير التفاعلية -->
+            <div class="col-lg-7">
+                <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-25 rounded-pill px-3 py-2 mb-4 fw-semibold" style="font-size: 0.9rem;">
+                    🟢 Connecting Patients & Dental Students
+                </span>
+
+                <h1 class="display-3 fw-bold mb-4" style="line-height: 1.2; letter-spacing: -1px;">
+                    Affordable Dental <br>
+                    <span style="color: #64b5f6;">Care, Done Right.</span>
+                </h1>
+
+                <p class="lead text-white opacity-75 mb-5 fs-5" style="max-width: 550px;">
+                    DentLink bridges the gap between patients seeking quality, budget-friendly dental treatment and talented, supervised dental students who need clinical experience.
+                </p>
+
+                <!-- 🔘 زراير الاختيار والربط الفعلي -->
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    <!-- زرار المريض: هيوديه على الـ PatientController لما نكريته -->
+                    <a asp-controller="Patient" asp-action="Index" class="btn btn-white bg-white text-primary fw-bold px-4 py-3 rounded-pill shadow-sm d-flex align-items-center gap-2 border-0 hover-scale">
+                        💙 I'm a Patient <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                    <a asp-controller="Doctor" asp-action="UnderReview" class="btn btn-outline-white border-white border-2 text-white fw-bold px-4 py-3 rounded-pill d-flex align-items-center gap-2 hover-bg-white">
+                        🎓 I'm a Dental Student <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- الإحصائيات التحتانية -->
+                <div class="d-flex align-items-center gap-2 mt-4 text-white opacity-75">
+                    <div class="d-flex">
+                        <span class="badge bg-secondary rounded-circle px-2 py-1 fs-7">1</span>
+                        <span class="badge bg-secondary rounded-circle px-2 py-1 fs-7 ms-n1">2</span>
+                        <span class="badge bg-secondary rounded-circle px-2 py-1 fs-7 ms-n1">3</span>
+                    </div>
+                    <span class="fw-semibold small ms-2"><strong class="text-white">5,800+ patients</strong> treated successfully</span>
+                </div>
+            </div>
+
+            <!-- الجزء اليمين: الكارت والصور زي الفيجما -->
+            <div class="col-lg-5 position-relative text-center d-none d-lg-block">
+                <div class="position-relative d-inline-block">
+                    <!-- الصورة الأساسية للدكتور والمريض -->
+                    <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=500&h=400&q=80"
+                         alt="Dental Clinic"
+                         class="rounded-4 shadow-lg object-fit-cover img-fluid"
+                         style="border: 4px solid rgba(255,255,255,0.1);" />
+
+                    <!-- كارت الـ 98% الطاير -->
+                    <div class="position-absolute bg-primary bg-opacity-75 backdrop-blur text-white p-3 rounded-3 shadow-sm border border-white border-opacity-10"
+                         style="top: -20px; right: -20px; width: 120px; backdrop-filter: blur(8px);">
+                        <h4 class="fw-bold mb-0">98%</h4>
+                        <small class="fs-8 opacity-75">Satisfaction</small>
+                    </div>
+
+                    <!-- كارت الإشراف التحتاني -->
+                    <div class="position-absolute bg-white text-dark p-3 rounded-4 shadow-lg d-flex align-items-center gap-3 border border-light"
+                         style="bottom: -20px; left: -20px; width: 260px; text-align: left;">
+                        <div class="bg-success-subtle text-success p-2 rounded-circle fs-4">🛡️</div>
+                        <div>
+                            <h6 class="fw-bold mb-0 small" style="color: #333;">Verified Treatment</h6>
+                            <small class="text-muted fw-medium" style="font-size: 0.75rem;">Faculty Supervised</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
+
+<!-- ستايل إضافي عشان الحركات والأنيميشن التفاعلي للزراير -->
+<style>
+    .hover-scale {
+        transition: transform 0.2s;
+    }
+
+        .hover-scale:hover {
+            transform: scale(1.03);
+            background-color: #f8f9fa !important;
+        }
+
+    .hover-bg-white {
+        transition: all 0.3s;
+    }
+
+        .hover-bg-white:hover {
+            background-color: #ffffff !important;
+            color: #1e3c72 !important;
+        }
+
+    .fs-8 {
+        font-size: 0.75rem;
+    }
+</style>

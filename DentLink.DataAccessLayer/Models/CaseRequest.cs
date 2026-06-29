@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DentLink.DataAccessLayer.Models
 {
@@ -12,16 +15,21 @@ namespace DentLink.DataAccessLayer.Models
         [ForeignKey(nameof(Case))]
         public int CaseId { get; set; }
 
-        public DateTime RequestedAt { get; set; } = DateTime.UtcNow;
+        [Required]
+        public string Status { get; set; } = "pending"; // (pending, accepted, rejected)
 
         [Required]
-        public string Status { get; set; }
+        public decimal TransportCost { get; set; } // تكلفة المواصلات المحددة في الطلب
 
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal TransportCost { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+        // --- Navigation Properties ---
         public Case Case { get; set; }
+
+        // ربط One-to-One مع الجلسة (الطلب المقبول بيعمل جلسة)
         public Session Session { get; set; }
+
+        // الربط مع الجداول الوسيطة Many-to-Many
         public ICollection<SendCaseRequest> SendCaseRequests { get; set; } = new List<SendCaseRequest>();
         public ICollection<SelectCaseRequest> SelectCaseRequests { get; set; } = new List<SelectCaseRequest>();
     }

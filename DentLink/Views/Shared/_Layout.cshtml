@@ -12,7 +12,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DentLink</a>
+                <a class="navbar-brand fw-bold text-primary" asp-area="" asp-controller="Home" asp-action="Index">DentLink</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -24,6 +24,22 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+
+                        <li class="nav-item border-start ps-2 ms-2">
+                            <a class="nav-link text-primary fw-bold" asp-controller="Doctor" asp-action="Dashboard">📊 Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-success fw-bold" asp-controller="Doctor" asp-action="AvailableCases">📋 Available Cases</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark fw-bold" asp-controller="Doctor" asp-action="Sessions">📅 Sessions</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary fw-bold px-3" asp-controller="Doctor" asp-action="Profile">👤 My Profile</a>
                         </li>
                     </ul>
                 </div>

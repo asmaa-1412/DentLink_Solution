@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DentLink.DataAccessLayer.Models
 {
@@ -13,10 +15,10 @@ namespace DentLink.DataAccessLayer.Models
         public int PatientId { get; set; }
 
         [Required]
-        public string Type { get; set; }
+        public string Type { get; set; } // (Filling, Extraction, Cleaning)
 
         [Required]
-        public string Status { get; set; }
+        public string Status { get; set; } // (Available, Taken)
 
         public string Description { get; set; }
 
@@ -24,7 +26,7 @@ namespace DentLink.DataAccessLayer.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation
+        // --- Navigation Properties ---
         public Patient Patient { get; set; }
         public ICollection<CaseRequest> CaseRequests { get; set; } = new List<CaseRequest>();
     }
