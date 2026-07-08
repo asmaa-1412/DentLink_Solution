@@ -2,7 +2,7 @@ using DentLink.BusinessLogicLayer.Services.ServiceImplementation;
 using DentLink.BusinessLogicLayer.Services.ServiceInterface;
 using DentLink.DataAccessLayer.Contracts;
 using DentLink.DataAccessLayer.Data;
-using DentLink.Repositories;
+using DentLink.DataAccessLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace DentLink.PresentionLayer

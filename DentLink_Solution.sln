@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11520.95 d18.3
+VisualStudioVersion = 18.3.11520.95
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentLink", "DentLink\DentLink.csproj", "{65B1AA71-CC2E-407A-AC9E-9C31986AD0CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentLink.BusinessLogicLayer", "DentLink.BusinessLogicLayer\DentLink.BusinessLogicLayer.csproj", "{3E96004E-9787-F78B-2A92-B4A897629AD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentLink.DataAccessLayer", "DentLink.DataAccessLayer\DentLink.DataAccessLayer.csproj", "{E0A3F400-878F-E70A-361D-D61174D70763}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{65B1AA71-CC2E-407A-AC9E-9C31986AD0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65B1AA71-CC2E-407A-AC9E-9C31986AD0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65B1AA71-CC2E-407A-AC9E-9C31986AD0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E96004E-9787-F78B-2A92-B4A897629AD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E96004E-9787-F78B-2A92-B4A897629AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E96004E-9787-F78B-2A92-B4A897629AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E96004E-9787-F78B-2A92-B4A897629AD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0A3F400-878F-E70A-361D-D61174D70763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0A3F400-878F-E70A-361D-D61174D70763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0A3F400-878F-E70A-361D-D61174D70763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0A3F400-878F-E70A-361D-D61174D70763}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
