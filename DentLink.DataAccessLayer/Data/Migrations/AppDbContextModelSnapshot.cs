@@ -70,7 +70,7 @@ namespace DentLink.DataAccessLayer.Data.Migrations
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("RequestedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
@@ -97,41 +97,33 @@ namespace DentLink.DataAccessLayer.Data.Migrations
 
                     b.Property<string>("AcademicYear")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ApprovalDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Faculty")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdCardUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProfilePicture")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StudentIDNumber")
+                    b.Property<string>("Phone")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("University")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -200,28 +192,17 @@ namespace DentLink.DataAccessLayer.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ActualEndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ActualStartTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("CaseRequestId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsCompleted")
+                    b.Property<bool>("PatientArrived")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsPatientArrived")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("SessionDate")
+                    b.Property<DateTime?>("SessionEnd")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<DateTime>("SessionStart")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
