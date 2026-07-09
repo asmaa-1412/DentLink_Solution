@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using DentLink.DataAccessLayer.Enums;
-using Microsoft.AspNetCore.Http;
-
 namespace DentLink.DataAccessLayer.Models
 {
     public class Case

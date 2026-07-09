@@ -54,11 +54,11 @@
 
                                 @* 🔴 هنا تم تصليح الـ Razor Syntax بإضافة علامات الـ @ لتقسيم الصور أوتوماتيكياً حسب نوع الحالة *@
                                 <div style="height: 180px;">
-                                    @if (item.Type == "Filling")
+                                    @if (item.Types == "Filling")
                                     {
                                         <div class="w-100 h-100" style="background-image: url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500'); background-size: cover; background-position: center;"></div>
                                     }
-                                    else if (item.Type == "Extraction")
+                                    else if (item.Types == "Extraction")
                                     {
                                         <div class="w-100 h-100" style="background-image: url('https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=500'); background-size: cover; background-position: center;"></div>
                                     }

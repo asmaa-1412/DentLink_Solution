@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DentLink - Cases Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] min-h-screen flex antialiased text-[#1E293B]">
+
+    <aside class="w-64 bg-white border-r border-slate-100 flex flex-col justify-between h-screen sticky top-0 px-4 py-6 shrink-0">
+        <div class="space-y-7">
+            <div class="flex items-center gap-2 text-[#2563EB] font-bold text-xl px-2">
+               
+                  <span class="text-black">Dent<span class="text-[#2563EB]">Link</span></span>
+            </div>
+            
+            <div class="px-2">
+                <span class="text-[10px] tracking-wider font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded uppercase">Administrator</span>
+            </div>
+
+            <nav class="space-y-1">
+                <a href="admin-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                    <i class="fa-solid fa-table-columns text-sm w-5"></i><span>Dashboard</span>
+                </a>
+                <a href="doctor-approvals.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                    <i class="fa-solid fa-user-check text-sm w-5"></i><span>Doctor Approvals</span>
+                </a>
+                <a href="admin-doctors.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                    <i class="fa-solid fa-user-doctor text-sm w-5"></i><span>Verified Doctors</span>
+                </a>
+                <a href="admin-patients.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                    <i class="fa-solid fa-users text-sm w-5"></i><span>Patients</span>
+                </a>
+                <a href="admin-cases.html" class="flex items-center gap-3 px-3 py-2.5 bg-[#EFF6FF] text-[#2563EB] font-semibold text-xs rounded-xl transition">
+                    <i class="fa-regular fa-folder-open text-sm w-5"></i><span>Cases</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="border-t border-slate-100 pt-4 space-y-3">
+            <div class="flex items-center gap-2 px-2">
+                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600"><i class="fa-solid fa-user-tie"></i></div>
+                <div>
+                    <h4 class="text-xs font-bold text-slate-800">Dr. Admin</h4>
+                    <p class="text-[10px] text-slate-400">Administrator</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0">
+        <header class="h-16 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40">
+            <h2 class="text-sm font-bold text-slate-800">Cases Management</h2>
+            <div class="flex items-center gap-4">
+                <span class="text-xs font-semibold bg-slate-100 px-3 py-1 rounded-full text-slate-600" id="totalCasesCounter">5 cases</span>
+            </div>
+        </header>
+
+        <main class="flex-1 px-8 py-8 space-y-6 max-w-7xl w-full">
+            <div>
+                <h1 class="text-xl font-bold text-slate-900">All Cases</h1>
+                <p class="text-xs text-slate-400 font-medium mt-1">Monitor all dental cases across the platform and track their treatment statuses.</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="caseSearchInput" oninput="filterCases()" placeholder="Search by patient or student..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl text-xs outline-none transition">
+                </div>
+                <div class="relative">
+                    <i class="fa-solid fa-tooth absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <select id="typeFilter" onchange="filterCases()" class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl text-xs outline-none transition appearance-none">
+                        <option value="">All Treatments</option>
+                        <option value="Filling">Filling</option>
+                        <option value="Extraction">Extraction</option>
+                        <option value="Cleaning">Cleaning</option>
+                        <option value="Root Canal">Root Canal</option>
+                        <option value="Orthodontics">Orthodontics</option>
+                    </select>
+                </div>
+                <div class="relative">
+                    <i class="fa-solid fa-circle-info absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <select id="statusFilter" onchange="filterCases()" class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl text-xs outline-none transition appearance-none">
+                        <option value="">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="space-y-3" id="casesListContainer">
+                
+                <div class="case-card bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-200" data-treatment="Filling" data-status="active" data-patient="Sara Mohamed" data-student="Omar Khaled">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center shrink-0">
+                            <i class="fa-regular fa-folder-open text-base"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-xs font-bold text-slate-900">Filling</h3>
+                                <span class="bg-blue-50 text-[#2563EB] text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">active</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium">
+                                <span class="text-slate-400 font-normal">Patient:</span> Sara Mohamed 
+                                <span class="mx-2 text-slate-300">|</span> 
+                                <span class="text-slate-400 font-normal">Student:</span> Omar Khaled
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 justify-between sm:justify-end shrink-0">
+                        <div class="text-slate-400 text-xs font-medium flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock text-xs"></i><span>Jun 18, 2026</span>
+                        </div>
+                        <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                    </div>
+                </div>
+
+                <div class="case-card bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-200" data-treatment="Extraction" data-status="completed" data-patient="Ahmed Hassan" data-student="Nour Ibrahim">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center shrink-0">
+                            <i class="fa-regular fa-folder-open text-base"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-xs font-bold text-slate-900">Extraction</h3>
+                                <span class="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">completed</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium">
+                                <span class="text-slate-400 font-normal">Patient:</span> Ahmed Hassan 
+                                <span class="mx-2 text-slate-300">|</span> 
+                                <span class="text-slate-400 font-normal">Student:</span> Nour Ibrahim
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 justify-between sm:justify-end shrink-0">
+                        <div class="text-slate-400 text-xs font-medium flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock text-xs"></i><span>Jun 17, 2026</span>
+                        </div>
+                        <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                    </div>
+                </div>
+
+                <div class="case-card bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-200" data-treatment="Cleaning" data-status="pending" data-patient="Layla Hassan" data-student="Karim Saad">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center shrink-0">
+                            <i class="fa-regular fa-folder-open text-base"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-xs font-bold text-slate-900">Cleaning</h3>
+                                <span class="bg-amber-50 text-amber-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">pending</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium">
+                                <span class="text-slate-400 font-normal">Patient:</span> Layla Hassan 
+                                <span class="mx-2 text-slate-300">|</span> 
+                                <span class="text-slate-400 font-normal">Student:</span> Karim Saad
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 justify-between sm:justify-end shrink-0">
+                        <div class="text-slate-400 text-xs font-medium flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock text-xs"></i><span>Jun 16, 2026</span>
+                        </div>
+                        <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                    </div>
+                </div>
+
+                <div class="case-card bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-200" data-treatment="Root Canal" data-status="active" data-patient="Mostafa Ali" data-student="Dina Fawzy">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center shrink-0">
+                            <i class="fa-regular fa-folder-open text-base"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-xs font-bold text-slate-900">Root Canal</h3>
+                                <span class="bg-blue-50 text-[#2563EB] text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">active</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium">
+                                <span class="text-slate-400 font-normal">Patient:</span> Mostafa Ali 
+                                <span class="mx-2 text-slate-300">|</span> 
+                                <span class="text-slate-400 font-normal">Student:</span> Dina Fawzy
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 justify-between sm:justify-end shrink-0">
+                        <div class="text-slate-400 text-xs font-medium flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock text-xs"></i><span>Jun 15, 2026</span>
+                        </div>
+                        <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                    </div>
+                </div>
+
+                <div class="case-card bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-200" data-treatment="Orthodontics" data-status="pending" data-patient="Yasmine Nour" data-student="">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center shrink-0">
+                            <i class="fa-regular fa-folder-open text-base"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-xs font-bold text-slate-900">Orthodontics</h3>
+                                <span class="bg-amber-50 text-amber-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">pending</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium">
+                                <span class="text-slate-400 font-normal">Patient:</span> Yasmine Nour 
+                                <span class="mx-2 text-slate-300">|</span> 
+                                <span class="text-slate-400 font-normal">Student:</span> <span class="text-slate-400 italic font-normal">Not assigned yet</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 justify-between sm:justify-end shrink-0">
+                        <div class="text-slate-400 text-xs font-medium flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock text-xs"></i><span>Jun 14, 2026</span>
+                        </div>
+                        <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="noCasesState" class="hidden bg-white border border-slate-100 rounded-2xl py-12 text-center space-y-2 shadow-sm">
+                <i class="fa-regular fa-folder-open text-slate-300 text-3xl"></i>
+                <p class="text-xs font-medium text-slate-400">No cases found matching your selections.</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function filterCases() {
+            const searchVal = document.getElementById('caseSearchInput').value.toLowerCase();
+            const typeVal = document.getElementById('typeFilter').value;
+            const statusVal = document.getElementById('statusFilter').value;
+            
+            const cards = document.querySelectorAll('.case-card');
+            const noCasesState = document.getElementById('noCasesState');
+            let matchCount = 0;
+
+            cards.forEach(card => {
+                const treatment = card.getAttribute('data-treatment');
+                const status = card.getAttribute('data-status');
+                const patient = card.getAttribute('data-patient').toLowerCase();
+                const student = card.getAttribute('data-student').toLowerCase();
+
+                const matchesSearch = patient.includes(searchVal) || student.includes(searchVal);
+                const matchesType = typeVal === "" || treatment === typeVal;
+                const matchesStatus = statusVal === "" || status === statusVal;
+
+                if (matchesSearch && matchesType && matchesStatus) {
+                    card.classList.remove('hidden');
+                    card.classList.add('flex');
+                    matchCount++;
+                } else {
+                    card.classList.remove('flex');
+                    card.classList.add('hidden');
+                }
+            });
+
+            // Update Counter Text
+            document.getElementById('totalCasesCounter').innerText = `${matchCount} case${matchCount !== 1 ? 's' : ''}`;
+
+            // Show Empty State if no matches
+            if (matchCount === 0) {
+                noCasesState.classList.remove('hidden');
+            } else {
+                noCasesState.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

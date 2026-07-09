@@ -4,7 +4,6 @@ using System.Text;
 using DentLink.DataAccessLayer.Contracts;
 using DentLink.DataAccessLayer.Data;
 using DentLink.DataAccessLayer.Models;
-using DentLink.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace DentLink.DataAccessLayer.Repositories

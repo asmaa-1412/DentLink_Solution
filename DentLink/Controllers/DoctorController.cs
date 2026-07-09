@@ -2,11 +2,6 @@
 using DentLink.DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 
 namespace DentLink.PresentionLayer.Controllers
 {
@@ -35,9 +30,9 @@ namespace DentLink.PresentionLayer.Controllers
             ViewBag.IsApproved = doctor?.IsApproved ?? false;
 
             // حساب العدادات الحية
-            ViewBag.AvailableCasesCount = await _context.Cases.CountAsync(c => c.Status == "Available");
-            ViewBag.AcceptedRequestsCount = await _context.CaseRequests.CountAsync(cr => cr.Status == "Accepted");
-            ViewBag.CompletedSessionsCount = await _context.Sessions.CountAsync(s => s.Status == "completed");
+            ViewBag.AvailableCasesCount = await _context.Cases.CountAsync(c => c.status == "Available");
+            ViewBag.AcceptedRequestsCount = await _context.CaseRequests.CountAsync(cr => cr.status == "Accepted");
+            ViewBag.CompletedSessionsCount = await _context.Sessions.CountAsync(s => s.status == "completed");
 
             // جلب الأنشطة الأخيرة (الطلبات المقدمة)
             var recentRequests = await _context.SendCaseRequests
@@ -53,7 +48,7 @@ namespace DentLink.PresentionLayer.Controllers
                 .Include(s => s.CaseRequest)
                     .ThenInclude(cr => cr.Case)
                         .ThenInclude(c => c.Patient)
-                .Where(s => s.Status != "completed")
+                .Where(s => s.status != "completed")
                 .OrderBy(s => s.SessionDate)
                 .Take(3)
                 .ToListAsync();
@@ -78,7 +73,7 @@ namespace DentLink.PresentionLayer.Controllers
             // 1. جلب الحالات المتاحة كـ Queryable لتجهيز الفلاتر
             var casesQuery = _context.Cases
                 .Include(c => c.Patient)
-                .Where(c => c.Status == "Available")
+                .Where(c => c.status == "Available")
                 .AsQueryable();
 
             // 2. فلترة بالبحث (مع تحويل الكلمات لـ Lowercase لتجنب حساسية الحروف الكبيرة والصغيرة)
@@ -136,7 +131,7 @@ namespace DentLink.PresentionLayer.Controllers
             var newRequest = new CaseRequest
             {
                 CaseId = caseId,
-                Status = "pending",
+                status = "pending",
                 TransportCost = transportCost,
                 CreatedAt = DateTime.UtcNow
             };
@@ -166,7 +161,7 @@ namespace DentLink.PresentionLayer.Controllers
                     .ThenInclude(cr => cr.Case)
                         .ThenInclude(c => c.Patient)
                 .Where(session => session.CaseRequest.SendCaseRequests.Any(s => s.DoctorId == currentDoctorId))
-                .OrderByDescending(session => session.SessionDate)
+                .OrderByDescending(session => session.st)
                 .ToListAsync();
 
             return View(doctorSessions);
@@ -266,9 +261,9 @@ namespace DentLink.PresentionLayer.Controllers
             // تحديث باقي البيانات
             doctorInDb.FullName = updatedDoctor.FullName;
             doctorInDb.University = updatedDoctor.University;
-            doctorInDb.Faculty = updatedDoctor.Faculty;
+            doctorInDb.Department = updatedDoctor.Department;
             doctorInDb.AcademicYear = updatedDoctor.AcademicYear;
-            doctorInDb.StudentIDNumber = updatedDoctor.StudentIDNumber;
+            doctorInDb.IdCardUrl = updatedDoctor.IdCardUrl;
 
             _context.Doctors.Update(doctorInDb);
             await _context.SaveChangesAsync();

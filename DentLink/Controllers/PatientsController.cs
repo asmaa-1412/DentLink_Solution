@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DentLink.PresentationLayer.Controllers
 {
-    
-    [Route("[controller]")]
     public class PatientsController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -16,48 +14,37 @@ namespace DentLink.PresentationLayer.Controllers
             _unitOfWork = unitOfWork;
         }
 
-
-
-        [HttpGet("Profile/{patientId}")]
-        public async Task<IActionResult> GetPatientProfile(int patientId)
+        [HttpGet]
+        public async Task<IActionResult> Profile(int id) 
         {
-            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(patientId);
-            if (patient == null) return NotFound(new { Message = "Patient Not Found." });
+            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(id);
+            if (patient == null) return NotFound();
 
-            var profileData = new
-            {
-                patient.Id,
-                patient.FullName,
-                patient.Email ,
-                patient.Phone ,
-                Location = patient.Address,
-                patient.ImageUrl 
-            };
-
-            return Json(profileData);
+            return View(patient);
         }
 
-
-
-        [HttpPost("Profile/{patientId}")]
-        public async Task<IActionResult> UpdatePatientProfile(int patientId, [FromForm] UpdateProfileDTO model)
+        [HttpPost]
+        public async Task<IActionResult> Profile(int id, [FromForm] UpdateProfileDTO model)
         {
-            if (model == null) return BadRequest(new { Message = "Data Is null!" });
+            if (model == null) return BadRequest("Data Is null!");
 
-            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(patientId);
-            if (patient == null) return NotFound(new { Message = "This Patient Not Found." });
+            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(id);
+            if (patient == null) return NotFound();
 
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                return View(patient);
+            }
 
             patient.FullName = model.FullName;
             patient.Address = model.Location;
 
             if (model.ImageUrl != null && model.ImageUrl.Length > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "profiles");
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "images", "profiles");
                 if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
-                var uniqueFileName = $"{patientId}_{Path.GetFileName(model.ImageUrl.FileName)}";
+                var uniqueFileName = $"{id}_{Path.GetFileName(model.ImageUrl.FileName)}";
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -65,25 +52,15 @@ namespace DentLink.PresentationLayer.Controllers
                     await model.ImageUrl.CopyToAsync(fileStream);
                 }
 
-                patient.ImageUrl = $"/images/profiles/{uniqueFileName}";
+                patient.ImageUrl = $"/assets/images/profiles/{uniqueFileName}";
             }
 
             _unitOfWork.Repository<Patient>().Update(patient);
             await _unitOfWork.CompleteAsync();
 
-            var updatedData = new
-            {
-                Message = "Profile updated successfully!",
-                Profile = new
-                {
-                    patient.Id,
-                    patient.FullName,
-                    Location = patient.Address,
-                    patient.ImageUrl
-                }
-            };
+            TempData["SuccessMessage"] = "Profile updated successfully!";
 
-            return Json(updatedData);
+            return RedirectToAction("Profile", new { id = patient.Id });
         }
     }
 }

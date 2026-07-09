@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DentLink - Choose Role</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#EFF6FF] min-h-screen flex flex-col justify-between items-center p-6 antialiased">
+
+    <!-- Top Spacer to help center content beautifully -->
+    <div class="hidden md:block"></div>
+
+    <!-- Main Content Container -->
+    <div class="max-w-4xl w-full mx-auto flex flex-col items-center space-y-10 my-auto">
+        
+        <!-- Logo Element -->
+        <div class="flex items-center gap-2  font-bold text-2xl">
+            <span class="text-black">Dent<span class="text-[#2563EB]">Link</span></span>
+        </div>
+
+        <!-- Header Titles -->
+        <div class="text-center space-y-2">
+            <h1 class="text-3xl md:text-4xl font-bold text-[#0F172A]">Join DentLink</h1>
+            <p class="text-sm md:text-base text-slate-500 font-medium">Choose how you want to use DentLink</p>
+        </div>
+
+        <!-- Two Columns Cards Grid -->
+        <div class="grid md:grid-cols-2 gap-8 w-full max-w-3xl pt-1">
+            
+            <!-- Card 1: Patient Option -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm flex flex-col items-center text-center justify-between space-y-6 hover:shadow-md transition duration-200">
+                <div class="space-y-4 flex flex-col items-center">
+                    <!-- Heart Icon Box -->
+                    <div class="w-16 h-16 rounded-2xl bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-[#0F172A]">Patient</h2>
+                    <p class="text-xs md:text-sm text-slate-500 leading-relaxed max-w-[240px]">
+                        Find dental students and get affordable dental care supervised by licensed professionals.
+                    </p>
+                </div>
+                <button onclick="handleRoleSelection('patient')" class="w-full bg-[#2563EB] text-white py-3 rounded-xl font-semibold text-sm hover:bg-blue-700 transition duration-150">
+                    Continue as Patient
+                </button>
+            </div>
+
+            <!-- Card 2: Dental Student Option -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm flex flex-col items-center text-center justify-between space-y-6 hover:shadow-md transition duration-200">
+                <div class="space-y-4 flex flex-col items-center">
+                    <!-- Graduation Cap Icon Box -->
+                    <div class="w-16 h-16 rounded-2xl bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-[#0F172A]">Dental Student</h2>
+                    <p class="text-xs md:text-sm text-slate-500 leading-relaxed max-w-[240px]">
+                        Find real cases and improve your clinical experience under faculty supervision.
+                    </p>
+                </div>
+                <button onclick="handleRoleSelection('student')" class="w-full border-2 border-[#2563EB] text-[#2563EB] py-2.5 rounded-xl font-semibold text-sm hover:bg-blue-50 transition duration-150">
+                    Continue as Student
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bottom Navigation Links -->
+    <div class="flex flex-col items-center space-y-6 pt-1 w-full">
+        <a href="login.html" class="text-xs text-slate-500 hover:text-[#2563EB] font-medium flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-arrow-left text-[10px]"></i> Back to login
+        </a>
+    </div>
+
+    <script>
+        function handleRoleSelection(role) {
+    if (role === 'patient') {
+        window.location.href = 'signup.html'; 
+    } else if (role === 'student') {
+        window.location.href = 'doctor-signup.html'; 
+    }
+}
+    </script>
+</body>
+</html>
