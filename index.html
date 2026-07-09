@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dental Web Platform Landing Page</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Inter used in Figma) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-white text-[#1E293B] antialiased">
+
+    <!-- 1. Navigation Bar (image_0a101f.jpg) -->
+    <header class="bg-white border-b border-slate-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-2 text-[#2563EB] font-bold text-2xl">
+                <span class="text-black" >Dent<span class="text-[#2563EB]">Link</span></span>
+            </div>
+            <!-- Links -->
+            <nav class="hidden md:flex items-center gap-8 text-[#475569] font-medium">
+                <a href="#about" class="hover:text-[#2563EB]">About</a>
+                <a href="#Services" class="hover:text-[#2563EB]">Services</a>
+                <a href="#howitworks" class="hover:text-[#2563EB]">How It Works</a>
+                <a href="#students" class="hover:text-[#2563EB]">Students</a>
+                <a href="#Contact" class="hover:text-[#2563EB]">Contact</a>
+            </nav>
+            <!-- Auth Buttons -->
+            <div class="flex items-center gap-4">
+<button onclick="window.location.href='auth/login.html'" class="text-[#475569] font-medium border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-50 transition">Log In</button>                <a href="auth/role-selection.html" class="bg-[#2563EB] text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Hero Section (image_0a101f.jpg) -->
+    <section class="relative bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white py-20 px-6">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <!-- Left Side -->
+            <div class="space-y-6">
+                <div class="inline-flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full text-xs font-medium border border-white/10">
+                    <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+                    Connecting Patients & Dental Students
+                </div>
+                <h1 class="text-5xl font-bold leading-tight">
+                    Affordable Dental <br>Care, Done Right.
+                </h1>
+                <p class="text-white/80 text-base max-w-lg leading-relaxed">
+                    DentLink bridges the gap between patients seeking quality, budget-friendly dental treatment and talented, supervised dental students who need clinical experience.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <button onclick="window.location.href='auth/signup.html'" class="flex items-center justify-center gap-3 bg-[#2563EB] text-white px-8 py-4 rounded-xl font-semibold text-base hover:bg-blue-700 transition duration-200 shadow-lg shadow-blue-100">
+    <i class="fa-solid fa-heart-pulse text-lg"></i>
+    <span>I'm a Patient</span>
+</button>
+                    <a href="auth/doctor-signup.html" class="border border-white/40 bg-white/5 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:bg-white/10">
+                        <i class="fa-solid fa-graduation-cap"></i> I'm a Dental Student <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </a>
+                </div>
+                <!-- Avatars and Stats -->
+                <div class="flex items-center gap-3 pt-4">
+                    <div class="flex -space-x-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-300 border-2 border-blue-600 flex items-center justify-center text-[10px] font-bold">1</div>
+                        <div class="w-8 h-8 rounded-full bg-blue-200 border-2 border-blue-600 flex items-center justify-center text-[10px] font-bold">2</div>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 border-2 border-blue-600 flex items-center justify-center text-[10px] font-bold">3</div>
+                        <div class="w-8 h-8 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center text-[10px] font-bold text-blue-600">4</div>
+                    </div>
+                    <p class="text-xs text-white/90">5,800+ patients treated successfully</p>
+                </div>
+            </div>
+
+            <!-- Right Side (Doctor Image & Badges) -->
+            <div class="relative justify-self-center md:justify-self-end">
+                <div class="relative rounded-2xl overflow-hidden max-w-md shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=600&q=80" alt="Dental Care" class="w-full object-cover">
+                </div>
+                <!-- Top Right Badge -->
+                <div class="absolute -top-4 -right-4 bg-[#2563EB] text-white p-3 rounded-xl shadow-lg text-center min-w-[70px]">
+                    <p class="text-lg font-bold leading-none">98%</p>
+                    <p class="text-[9px] opacity-80 mt-1">Satisfaction</p>
+                </div>
+                <!-- Bottom Left Badge -->
+                <div class="absolute -bottom-4 -left-4 bg-white text-slate-800 py-3 px-4 rounded-xl shadow-lg flex items-center gap-2 border border-slate-100">
+                    <i class="fa-solid fa-circle-check text-[#10B981] text-lg"></i>
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-medium">Verified Treatment</p>
+                        <p class="font-bold text-xs text-slate-800">Faculty Supervised</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Why DentLink Section (image_0a103f.jpg) -->
+    <section class="py-20 px-6 max-w-7xl mx-auto" id="about">
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-[#2563EB]">WHY DENTLINK</span>
+            <h2 class="text-3xl font-bold text-slate-900">Everything you need for trusted dental care</h2>
+            <p class="text-slate-500 text-sm">Built with both patients and students in mind — transparent, affordable, and always supervised.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- Card 1 -->
+            <div class="bg-slate-50/50 p-8 rounded-2xl border border-slate-100 shadow-sm">
+                <div class="w-10 h-10 rounded-lg bg-blue-50 text-[#2563EB] flex items-center justify-center text-lg mb-6"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3 class="text-base font-bold mb-2">Verified Students Only</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Every dental student is vetted and enrolled in accredited programs. All treatments are faculty-supervised.</p>
+            </div>
+            <!-- Card 2 -->
+            <div class="bg-slate-50/50 p-8 rounded-2xl border border-slate-100 shadow-sm">
+                <div class="w-10 h-10 rounded-lg bg-blue-50 text-[#2563EB] flex items-center justify-center text-lg mb-6"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h3 class="text-base font-bold mb-2">Affordable Quality Care</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Access professional dental procedures at significantly reduced costs without compromising on quality.</p>
+            </div>
+            <!-- Card 3 -->
+            <div class="bg-slate-50/50 p-8 rounded-2xl border border-slate-100 shadow-sm">
+                <div class="w-10 h-10 rounded-lg bg-blue-50 text-[#2563EB] flex items-center justify-center text-lg mb-6"><i class="fa-regular fa-clock"></i></div>
+                <h3 class="text-base font-bold mb-2">Fast Case Matching</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Submit your case and get matched with the right dental student within 24–48 hours.</p>
+            </div>
+            <!-- Card 4 -->
+            <div class="bg-slate-50/50 p-8 rounded-2xl border border-slate-100 shadow-sm">
+                <div class="w-10 h-10 rounded-lg bg-blue-50 text-[#2563EB] flex items-center justify-center text-lg mb-6"><i class="fa-solid fa-award"></i></div>
+                <h3 class="text-base font-bold mb-2">Faculty Supervised</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Every procedure is performed under the direct oversight of licensed dental professionals.</p>
+            </div>
+            <!-- Card 5 -->
+            <div class="bg-slate-50/50 p-8 rounded-2xl border border-slate-100 shadow-sm">
+                <div class="w-10 h-10 rounded-lg bg-blue-50 text-[#2563EB] flex items-center justify-center text-lg mb-6"><i class="fa-regular fa-comment-dots"></i></div>
+                <h3 class="text-base font-bold mb-2">Ongoing Support</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Receive follow-up communication, reminders, and post-treatment guidance through the platform.</p>
+            </div>
+            <!-- Card 6 -->
+            <div class="bg-slate-50/50 p-8 rounded-2xl border border-slate-100 shadow-sm">
+                <div class="w-10 h-10 rounded-lg bg-blue-50 text-[#2563EB] flex items-center justify-center text-lg mb-6"><i class="fa-solid fa-chart-line"></i></div>
+                <h3 class="text-base font-bold mb-2">Track Your Progress</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Monitor your treatment plan milestones and appointments via your personal dashboard.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Original Services Section (image_0a1097.jpg & image_0a10b3.jpg) -->
+    <section class="bg-[#0F172A] text-white py-20 px-6" id="Services">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-blue-400">OUR SERVICES</span>
+                <h2 class="text-3xl font-bold">Procedures available through DentLink</h2>
+                <p class="text-slate-400 text-sm">Students are matched to cases based on their semester, specialization, and faculty approval.</p>
+            </div>
+
+            <!-- Original Dark Blue/Indigo Cards Layout -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-[#1E293B] p-6 rounded-2xl border border-slate-800 shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-slate-700/50 text-blue-400 flex items-center justify-center text-lg mb-6"><i class="fa-regular fa-face-smile"></i></div>
+                    <h3 class="text-base font-bold mb-2">Teeth Whitening</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Professional bleaching for a brighter, confident smile.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-[#1E293B] p-6 rounded-2xl border border-slate-800 shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-slate-700/50 text-blue-400 flex items-center justify-center text-lg mb-6"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h3 class="text-base font-bold mb-2">Orthodontics</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Braces and aligners to correct misalignment.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-[#1E293B] p-6 rounded-2xl border border-slate-800 shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-slate-700/50 text-blue-400 flex items-center justify-center text-lg mb-6"><i class="fa-solid fa-stethoscope"></i></div>
+                    <h3 class="text-base font-bold mb-2">Root Canal Therapy</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Pain relief and preservation of infected teeth.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-[#1E293B] p-6 rounded-2xl border border-slate-800 shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-slate-700/50 text-blue-400 flex items-center justify-center text-lg mb-6"><i class="fa-solid fa-shield-virus"></i></div>
+                    <h3 class="text-base font-bold mb-2">Dental Implants</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Permanent replacements that look and feel natural.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="bg-[#1E293B] p-6 rounded-2xl border border-slate-800 shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-slate-700/50 text-blue-400 flex items-center justify-center text-lg mb-6"><i class="fa-solid fa-heart-pulse"></i></div>
+                    <h3 class="text-base font-bold mb-2">Preventive Cleaning</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Scale, polish and hygiene sessions to protect gums.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="bg-[#1E293B] p-6 rounded-2xl border border-slate-800 shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-slate-700/50 text-blue-400 flex items-center justify-center text-lg mb-6"><i class="fa-solid fa-ribbon"></i></div>
+                    <h3 class="text-base font-bold mb-2">Crowns & Veneers</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Restorations that rebuild structure and aesthetics.</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="auth/role-selection.html" class="inline-flex items-center gap-2 bg-white text-slate-900 px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-slate-100">Get Started <i class="fa-solid fa-arrow-right text-xs"></i></a>
+            </div>
+        </div>
+    </section>
+    <!-- 4. How It Works Section (image_0a105c.jpg) -->
+    <section class="py-20 bg-slate-50 px-6" id="howitworks">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-[#2563EB]">SIMPLE PROCESS</span>
+                <h2 class="text-3xl font-bold text-slate-900">How DentLink works</h2>
+                <p class="text-slate-500 text-sm">From submission to treatment in three clear steps — no complicated paperwork or waiting lists.</p>
+            </div>
+
+            <div class="relative grid md:grid-cols-3 gap-8">
+                <!-- Step Connector Line -->
+                <div class="absolute top-10 left-[15%] right-[15%] h-0.5 bg-blue-300 hidden md:block z-0"></div>
+
+                <!-- Step 1 -->
+                <div class="text-center space-y-4 relative z-10">
+                    <div class="w-16 h-16 bg-[#3B82F6] text-white rounded-2xl font-bold flex flex-col items-center justify-center mx-auto shadow-md">
+                        <span class="text-[9px] uppercase tracking-wider opacity-80">STEP</span>
+                        <span class="text-lg">01</span>
+                    </div>
+                    <h3 class="text-base font-bold">Submit Your Case</h3>
+                    <p class="text-slate-500 text-xs max-w-xs mx-auto leading-relaxed">Fill out the brief dental case form describing your symptoms, preferred location, and availability.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="text-center space-y-4 relative z-10">
+                    <div class="w-16 h-16 bg-[#3B82F6] text-white rounded-2xl font-bold flex flex-col items-center justify-center mx-auto shadow-md">
+                        <span class="text-[9px] uppercase tracking-wider opacity-80">STEP</span>
+                        <span class="text-lg">02</span>
+                    </div>
+                    <h3 class="text-base font-bold">Get Matched</h3>
+                    <p class="text-slate-500 text-xs max-w-xs mx-auto leading-relaxed">Our system connects you with a verified dental student whose training matches your case requirements.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="text-center space-y-4 relative z-10">
+                    <div class="w-16 h-16 bg-[#3B82F6] text-white rounded-2xl font-bold flex flex-col items-center justify-center mx-auto shadow-md">
+                        <span class="text-[9px] uppercase tracking-wider opacity-80">STEP</span>
+                        <span class="text-lg">03</span>
+                    </div>
+                    <h3 class="text-base font-bold">Receive Treatment</h3>
+                    <p class="text-slate-500 text-xs max-w-xs mx-auto leading-relaxed">Attend your appointment at a supervised clinic. Sit back and enjoy safe, affordable care.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. NEW: Patient Case Form Section (image_0a22e0.jpg & image_0a1078.jpg) -->
+    <section class="py-20 px-6  mx-auto grid md:grid-cols-12 gap-12 items-star0t bg-[#0F172A] text-white" >
+        <!-- Left Side Content (6 Columns) -->
+        <div class="md:col-span-5 space-y-6 bg-[#0F172A] text-white">
+            <span class="text-xs font-bold uppercase tracking-wider text-[#2563EB]">SUBMIT A CASE</span>
+            <h2 class="text-4xl font-bold text-slate-900 leading-tight">Tell us about your dental concern</h2>
+            <p class="text-slate-500 text-sm leading-relaxed">
+                Fill out the form and our team will match you with a verified dental student suited to your case within 24–48 hours.
+            </p>
+            
+            <!-- Features List -->
+            <ul class="space-y-3 text-sm text-slate-700 font-medium">
+                <li class="flex items-center gap-2"><i class="fa-regular fa-circle-check text-[#10B981]"></i> Free case submission — no fees to apply</li>
+                <li class="flex items-center gap-2"><i class="fa-regular fa-circle-check text-[#10B981]"></i> Treated under licensed faculty supervision</li>
+                <li class="flex items-center gap-2"><i class="fa-regular fa-circle-check text-[#10B981]"></i> Matched based on your issue and location</li>
+                <li class="flex items-center gap-2"><i class="fa-regular fa-circle-check text-[#10B981]"></i> Flexible appointment scheduling</li>
+            </ul>
+
+            <!-- Testimonial Card -->
+            <div class="bg-blue-50/50 border border-blue-100 p-6 rounded-2xl space-y-4">
+                <div class="rounded-xl overflow-hidden max-w-[180px]">
+                    <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=300&q=80" alt="Patient" class="w-full object-cover h-24">
+                </div>
+                <p class="text-xs text-slate-600 italic leading-relaxed">
+                    "DentLink gave me access to professional care at a price I could afford. The student was thorough and the supervisor was always present."
+                </p>
+                <p class="text-xs font-bold text-slate-800">— Sara M., Cairo Patient</p>
+            </div>
+        </div>
+
+        <!-- Right Side Form Box (7 Columns) -->
+        <div class="md:col-span-7  border border-slate-100 rounded-3xl p-8 shadow-sm  bg-[#0F172A] text-white">
+            <h3 class="text-xl font-bold text-slate-900 mb-1  text-white">Patient Case Form</h3>
+            <p class="text-xs text-slate-400 mb-6  text-white">All fields marked * are required.</p>
+            
+            <form class="space-y-4 bg-[#0F172A] text-white">
+                <div class="grid md:grid-cols-2 gap-4  text-white">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5  text-white">Full Name *</label>
+                        <input type="text" placeholder="Ahmed Hassan" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5  text-white">Phone Number *</label>
+                        <input type="text" placeholder="+20 100 000 0000" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5  text-white">Email Address *</label>
+                    <input type="email" placeholder="ahmed@example.com" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5  text-white">Dental Issue *</label>
+                    <div class="relative">
+                        <select class="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 appearance-none text-slate-400 focus:outline-none focus:border-blue-500">
+                            <option>Select your primary concern</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-4 top-3.5 text-xs text-slate-400 pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5  text-white">Describe Your Concern *</label>
+                    <textarea rows="4" placeholder="Please describe your symptoms, when they started, and any relevant medical history..." class="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+
+                <!-- Dropzone Component -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5  text-white">Upload X-Ray / Photo (optional)</label>
+                    <div class="border-2 border-dashed border-blue-200 bg-blue-50/20 rounded-xl p-6 text-center cursor-pointer hover:bg-blue-50/40 transition">
+                        <i class="fa-solid fa-cloud-arrow-up text-[#2563EB] text-xl mb-2"></i>
+                        <p class="text-xs font-medium text-slate-700">Drop files here or <span class="text-[#2563EB] underline">browse</span></p>
+                        <p class="text-[10px] text-slate-400 mt-1">JPG, PNG, PDF up to 10 MB</p>
+                    </div>
+                </div>
+
+                <button onclick="window.location.href='auth/login.html'"  class="w-full bg-[#2563EB] text-white py-3 rounded-lg font-semibold text-sm hover:bg-[#2563] transition flex items-center justify-center gap-2">
+                    Submit My Case <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+                
+                <p class="text-[10px] text-slate-400 text-center mt-2">
+                    By submitting, you agree to our Privacy Policy. Your data is never shared without consent.
+                </p>
+            </form>
+        </div>
+    </section>
+
+
+    <!-- 7. Statistics & Footer Section (image_0a10bc.jpg) -->
+    <section class="py-16 px-6 max-w-7xl mx-auto border-b border-slate-100\" id="students">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="w-10 h-10 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center mx-auto mb-3"><i class="fa-solid fa-users"></i></div>
+                <p class="text-3xl font-bold text-slate-900">5,800+</p>
+                <p class="text-xs text-slate-400 mt-1">Patients Helped</p>
+            </div>
+            <div>
+                <div class="w-10 h-10 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center mx-auto mb-3"><i class="fa-solid fa-graduation-cap"></i></div>
+                <p class="text-3xl font-bold text-slate-900">920+</p>
+                <p class="text-xs text-slate-400 mt-1">Verified Students</p>
+            </div>
+            <div>
+                <div class="w-10 h-10 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center mx-auto mb-3"><i class="fa-solid fa-building-columns"></i></div>
+                <p class="text-3xl font-bold text-slate-900">48</p>
+                <p class="text-xs text-slate-400 mt-1">Partner Universities</p>
+            </div>
+            <div>
+                <div class="w-10 h-10 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center mx-auto mb-3"><i class="fa-regular fa-star"></i></div>
+                <p class="text-3xl font-bold text-slate-900">98%</p>
+                <p class="text-xs text-slate-400 mt-1">Satisfaction Rate</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#0F172A] text-white py-16 px-6" id="Contact">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8">
+            <div class="col-span-2 space-y-4">
+                <div class="flex items-center gap-2 text-white font-bold text-xl">
+                   
+                    <span>DentLink</span>
+                </div>
+                <p class="text-slate-400 text-xs max-w-xs leading-relaxed">
+                    Connecting patients with affordable, supervised dental care through Egypt's best dental students.
+                </p>
+                <div class="flex gap-3 text-slate-400 pt-2">
+                    <a href="#" class="hover:text-white"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4">Platform</h4>
+                <ul class="space-y-2 text-xs text-slate-400">
+                    <li><a href="#" class="hover:text-white">For Patients</a></li>
+                    <li><a href="#" class="hover:text-white">For Students</a></li>
+                    <li><a href="#" class="hover:text-white">Universities</a></li>
+                    <li><a href="#" class="hover:text-white">How It Works</a></li>
+                    <li><a href="#" class="hover:text-white">Pricing</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4">Services</h4>
+                <ul class="space-y-2 text-xs text-slate-400">
+                    <li><a href="#" class="hover:text-white">Teeth Whitening</a></li>
+                    <li><a href="#" class="hover:text-white">Orthodontics</a></li>
+                    <li><a href="#" class="hover:text-white">Root Canal</a></li>
+                    <li><a href="#" class="hover:text-white">Implants</a></li>
+                    <li><a href="#" class="hover:text-white">Preventive Care</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4">Contact</h4>
+                <ul class="space-y-2 text-xs text-slate-400">
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5"></i> <span>12 Tahrir Square, Cairo, Egypt</span></li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-phone"></i> <span>+20 2 2345 6789</span></li>
+                    <li class="flex items-center gap-2"><i class="fa-regular fa-envelope"></i> <span>hello@dentlink.eg</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-12 pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between text-[10px] text-slate-500 gap-4">
+            <p>© 2026 DentLink. All rights reserved.</p>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-white">Privacy Policy</a>
+                <a href="#" class="hover:text-white">Terms of Service</a>
+                <a href="#" class="hover:text-white">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
