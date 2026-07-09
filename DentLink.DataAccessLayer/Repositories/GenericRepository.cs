@@ -1,9 +1,11 @@
-﻿using DentLink.DataAccessLayer.Contracts;
+﻿
+using System.Linq.Expressions;
+using DentLink.DataAccessLayer.Contracts;
 using DentLink.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace DentLink.Repositories
+namespace DentLink.DataAccessLayer.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {

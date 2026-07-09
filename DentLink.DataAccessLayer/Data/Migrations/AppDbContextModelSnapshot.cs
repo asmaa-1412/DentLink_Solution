@@ -17,7 +17,7 @@ namespace DentLink.DataAccessLayer.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -44,13 +44,11 @@ namespace DentLink.DataAccessLayer.Data.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Typies")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -80,6 +78,9 @@ namespace DentLink.DataAccessLayer.Data.Migrations
                     b.Property<decimal>("TransportCost")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CaseId");
@@ -102,7 +103,7 @@ namespace DentLink.DataAccessLayer.Data.Migrations
                     b.Property<DateTime?>("ApprovalDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Faculty")
+                    b.Property<string>("Department")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -145,8 +146,17 @@ namespace DentLink.DataAccessLayer.Data.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

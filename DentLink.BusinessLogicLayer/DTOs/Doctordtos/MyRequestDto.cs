@@ -1,4 +1,8 @@
-﻿namespace DentLink.DTOs.Doctordtos
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace DentLink.BusinessLogicLayer.DTOs.Doctordtos
 {
     public class MyRequestDto
     {
@@ -8,7 +12,7 @@
         public string PatientName { get; set; }
         public string PatientAddress { get; set; }
         public decimal TransportCost { get; set; }
-        public string Status { get; set; }  
+        public string Status { get; set; }
         public DateTime RequestedAt { get; set; }
     }
 }

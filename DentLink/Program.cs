@@ -1,7 +1,8 @@
-﻿using DentLink.DataAccessLayer.Contracts;
+﻿using DentLink.BusinessLogicLayer.Services.ServiceImplementation;
+using DentLink.BusinessLogicLayer.Services.ServiceInterface;
+using DentLink.DataAccessLayer.Contracts;
 using DentLink.DataAccessLayer.Data;
 using DentLink.DataAccessLayer.Repositories;
-using DentLink.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace DentLink.PresentionLayer
@@ -15,15 +16,16 @@ namespace DentLink.PresentionLayer
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            // 🗄️ تسجيل قاعدة البيانات (DbContext)
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            // 🚀 [الحل السحري] تسجيل الـ Unit of Work لحل مشكلة الـ Unable to resolve service
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            builder.Services.AddScoped<ISessionService, SessionService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -1,8 +1,6 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using DentLink.DataAccessLayer.Enums;
 
 namespace DentLink.DataAccessLayer.Models
 {
@@ -15,13 +13,13 @@ namespace DentLink.DataAccessLayer.Models
         [ForeignKey(nameof(Case))]
         public int CaseId { get; set; }
 
-        [Required]
-        public string Status { get; set; } = "pending"; // (pending, accepted, rejected)
+        public DateTime RequestedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public decimal TransportCost { get; set; } // تكلفة المواصلات المحددة في الطلب
+        public Status status { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal TransportCost { get; set; }
 
         // --- Navigation Properties ---
         public Case Case { get; set; }

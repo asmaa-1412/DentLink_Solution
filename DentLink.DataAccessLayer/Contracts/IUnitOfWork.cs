@@ -1,4 +1,6 @@
-﻿namespace DentLink.DataAccessLayer.Contracts
+﻿
+
+namespace DentLink.DataAccessLayer.Contracts
 {
     public interface IUnitOfWork : IDisposable
     {

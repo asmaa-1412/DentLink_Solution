@@ -1,4 +1,6 @@
-﻿namespace DentLink.DTOs.Doctordtos
+﻿
+
+namespace DentLink.BusinessLogicLayer.DTOs.Doctordtos
 {
     public class UpdateDoctorProfileDto
     {

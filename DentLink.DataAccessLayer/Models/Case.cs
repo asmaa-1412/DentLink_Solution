@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using DentLink.DataAccessLayer.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace DentLink.DataAccessLayer.Models
 {
@@ -15,18 +15,18 @@ namespace DentLink.DataAccessLayer.Models
         public int PatientId { get; set; }
 
         [Required]
-        public string Type { get; set; } // (Filling, Extraction, Cleaning)
+        public Typies Typies { get; set; }
 
         [Required]
-        public string Status { get; set; } // (Available, Taken)
+        public Status status { get; set; }
 
         public string Description { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // --- Navigation Properties ---
+        // Navigation
         public Patient Patient { get; set; }
         public ICollection<CaseRequest> CaseRequests { get; set; } = new List<CaseRequest>();
     }

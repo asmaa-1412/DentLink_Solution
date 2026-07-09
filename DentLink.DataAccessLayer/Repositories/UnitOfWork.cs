@@ -1,8 +1,10 @@
-﻿using DentLink.DataAccessLayer.Contracts;
+﻿
+using System.Collections;
+using DentLink.DataAccessLayer.Contracts;
 using DentLink.DataAccessLayer.Data;
 using System.Collections;
 
-namespace DentLink.Repositories
+namespace DentLink.DataAccessLayer.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -33,3 +35,4 @@ namespace DentLink.Repositories
         public void Dispose() => _context.Dispose();
     }
 }
+

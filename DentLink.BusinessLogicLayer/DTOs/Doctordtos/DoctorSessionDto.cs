@@ -1,4 +1,8 @@
-﻿namespace DentLink.DTOs.Doctordtos
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace DentLink.BusinessLogicLayer.DTOs.Doctordtos
 {
     public class DoctorSessionDto
     {
@@ -9,6 +13,6 @@
         public DateTime SessionStart { get; set; }
         public DateTime? SessionEnd { get; set; }
         public bool PatientArrived { get; set; }
-        public string Status { get; set; }  
+        public string Status { get; set; }
     }
 }

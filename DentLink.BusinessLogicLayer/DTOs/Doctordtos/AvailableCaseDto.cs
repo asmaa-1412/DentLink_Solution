@@ -1,4 +1,8 @@
-﻿namespace DentLink.DTOs.Doctordtos
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace DentLink.BusinessLogicLayer.DTOs.Doctordtos
 {
     public class AvailableCaseDto
     {
@@ -12,3 +16,4 @@
         public bool AlreadyRequested { get; set; }
     }
 }
+
