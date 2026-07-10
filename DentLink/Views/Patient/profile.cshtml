@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@model DentLink.DataAccessLayer.Models.Patient
+@{
+    Layout = null;
+    int patientId = (int)(ViewBag.PatientId ?? 0);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,95 +12,114 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
-</head>
-<body class="bg-[#F8FAFC] min-h-screen flex antialiased text-[#1E293B]">
+    <style>
+        body {
+        font-family: 'Inter', sans-serif;
+        }</style>
+    </head>
+    <body class="bg-[#F8FAFC] min-h-screen flex antialiased text-[#1E293B]">
 
-    <!-- SIDEBAR -->
-    <aside class="w-64 bg-white border-r border-slate-100 flex flex-col justify-between h-screen sticky top-0 px-4 py-6 shrink-0">
-        <div class="space-y-8">
-            <div class="flex items-center gap-2 text-[#2563EB] font-bold text-xl px-2 cursor-pointer" onclick="window.location.href='patient-dashboard.html'">
-                <span class="text-black">Dent<span class="text-[#2563EB]">Link</span></span>
-            </div>
-            <div class="px-2"><span class="text-[10px] tracking-wider font-bold text-[#2563EB] bg-[#EFF6FF] px-2.5 py-1 rounded-md uppercase">Patient</span></div>
-            <nav class="space-y-1">
-                <a href="patient-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
-                    <i class="fa-solid fa-table-columns text-sm w-5"></i><span>Dashboard</span>
-                </a>
-                <a href="my-cases.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
-                    <i class="fa-regular fa-folder-open text-sm w-5"></i><span>My Cases</span>
-                </a>
-                <a href="add-case.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
-                    <i class="fa-solid fa-plus text-sm w-5"></i><span>Add Case</span>
-                </a>
-                <a href="requests.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
-                    <i class="fa-regular fa-envelope text-sm w-5"></i><span>Requests</span>
-                </a>
-                <a href="profile.html" class="flex items-center gap-3 px-3 py-2.5 bg-[#EFF6FF] text-[#2563EB] font-semibold text-xs rounded-xl transition">
-                    <i class="fa-regular fa-user text-sm w-5"></i><span>Profile</span>
-                </a>
-            </nav>
-        </div>
-        <div class="border-t border-slate-100 pt-4 space-y-3">
-            <div class="flex items-center justify-between px-2">
-                <div class="flex items-center gap-2">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100" class="w-8 h-8 rounded-full object-cover">
-                    <div><h4 class="text-xs font-bold text-slate-800">Sara Mohamed</h4><p class="text-[10px] text-slate-400 font-medium">Patient</p></div>
+        <!-- SIDEBAR -->
+        <aside class="w-64 bg-white border-r border-slate-100 flex flex-col justify-between h-screen sticky top-0 px-4 py-6 shrink-0">
+            <div class="space-y-8">
+                <div class="flex items-center gap-2 text-[#2563EB] font-bold text-xl px-2 cursor-pointer" onclick="window.location.href='@Url.Action("PatientDashboard", "Sessions")'">
+                    <span class="text-black">Dent<span class="text-[#2563EB]">Link</span></span>
                 </div>
+                <div class="px-2"><span class="text-[10px] tracking-wider font-bold text-[#2563EB] bg-[#EFF6FF] px-2.5 py-1 rounded-md uppercase">Patient</span></div>
+                <nav class="space-y-1">
+                    <a href="@Url.Action("PatientDashboard", "Sessions")" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
+                        <i class="fa-solid fa-table-columns text-sm w-5"></i><span>Dashboard</span>
+                    </a>
+                    <a href="@Url.Action("MyCases", "Cases", new { id = patientId })" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
+                        <i class="fa-regular fa-folder-open text-sm w-5"></i><span>My Cases</span>
+                    </a>
+                    <a href="@Url.Action("Create", "Cases", new { patientId = patientId })" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
+                        <i class="fa-solid fa-plus text-sm w-5"></i><span>Add Case</span>
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
+                        <i class="fa-regular fa-envelope text-sm w-5"></i><span>Requests</span>
+                    </a>
+                    <a href="@Url.Action("Profile", "Patients", new { id = patientId })" class="flex items-center gap-3 px-3 py-2.5 bg-[#EFF6FF] text-[#2563EB] font-semibold text-xs rounded-xl transition">
+                        <i class="fa-regular fa-user text-sm w-5"></i><span>Profile</span>
+                    </a>
+                </nav>
             </div>
-        </div>
-    </aside>
-
-    <!-- MAIN AREA -->
-    <div class="flex-1 flex flex-col min-w-0">
-        <header class="h-16 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40">
-            <h2 class="text-sm font-bold text-slate-800">Profile</h2>
-        </header>
-
-        <main class="flex-1 px-8 py-8 max-w-2xl w-full">
-            <div class="mb-6">
-                <h1 class="text-xl font-bold text-slate-900">My Profile</h1>
-                <p class="text-xs text-slate-400 font-medium mt-1">Manage your personal information</p>
-            </div>
-
-            <!-- Profile Info Card -->
-            <form class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm space-y-5">
-                <!-- Avatar Upload Row -->
-                <div class="flex items-center gap-4 border-b border-slate-50 pb-4">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" class="w-16 h-16 rounded-full object-cover border border-slate-100">
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-800">Sara Mohamed</h3>
-                        <p class="text-xs text-slate-400 font-medium">sara.m@example.com</p>
-                        <button type="button" class="text-[11px] font-bold text-[#2563EB] hover:underline mt-1 block">Change photo</button>
+            <div class="border-t border-slate-100 pt-4 space-y-3">
+                <div class="flex items-center justify-between px-2">
+                    <div class="flex items-center gap-2">
+                        <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100" : Model.ImageUrl)" class="w-8 h-8 rounded-full object-cover">
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-800">@Model.User?.FullName</h4>
+                            <p class="text-[10px] text-slate-400 font-medium">Patient</p>
+                        </div>
                     </div>
                 </div>
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="flex items-center gap-3 w-full px-3 py-2 text-slate-400 hover:text-rose-600 font-semibold text-xs rounded-xl transition">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-sm w-5"></i><span>Logout</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
 
-                <!-- Fields -->
-                <div class="space-y-1.5">
-                    <label class="text-xs font-bold text-slate-700">Full Name</label>
-                    <input type="text" value="Sara Mohamed" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500">
+        <!-- MAIN AREA -->
+        <div class="flex-1 flex flex-col min-w-0">
+            <header class="h-16 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40">
+                <h2 class="text-sm font-bold text-slate-800">Profile</h2>
+            </header>
+
+            <main class="flex-1 px-8 py-8 max-w-2xl w-full">
+                <div class="mb-6">
+                    <h1 class="text-xl font-bold text-slate-900">My Profile</h1>
+                    <p class="text-xs text-slate-400 font-medium mt-1">Manage your personal information</p>
                 </div>
 
-                <div class="space-y-1.5">
-                    <label class="text-xs font-bold text-slate-700">Email</label>
-                    <input type="email" value="sara.m@example.com" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500">
-                </div>
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-xl p-3 mb-4 text-xs font-medium">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
 
-                <div class="space-y-1.5">
-                    <label class="text-xs font-bold text-slate-700">Phone</label>
-                    <input type="text" value="+20 100 234 5678" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500">
-                </div>
+                <form asp-controller="Patients" asp-action="Profile" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data" class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm space-y-5">
 
-                <div class="space-y-1.5">
-                    <label class="text-xs font-bold text-slate-700">Location</label>
-                    <input type="text" value="Nasr City, Cairo" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500">
-                </div>
+                    <div class="flex items-center gap-4 border-b border-slate-50 pb-4">
+                        <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" : Model.ImageUrl)" class="w-16 h-16 rounded-full object-cover border border-slate-100">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800">@Model.User?.FullName</h3>
+                            <p class="text-xs text-slate-400 font-medium">@Model.User?.Email</p>
+                            <label class="text-[11px] font-bold text-[#2563EB] hover:underline mt-1 block cursor-pointer">
+                                Change photo
+                                <input type="file" name="ImageUrl" accept=".jpg,.jpeg,.png" class="hidden">
+                            </label>
+                        </div>
+                    </div>
 
-                <button type="button" class="w-full bg-[#2563EB] text-white py-3 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md">
-                    Save Changes
-                </button>
-            </form>
-        </main>
-    </div>
-</body>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700">Full Name</label>
+                        <input type="text" name="FullName" value="@Model.User?.FullName" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700">Email</label>
+                        <input type="email" value="@Model.User?.Email" disabled class="w-full bg-slate-100 border border-slate-100 rounded-xl px-4 py-3 text-xs text-slate-400 font-medium cursor-not-allowed">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700">Phone</label>
+                        <input type="text" name="Phone" value="@Model.User?.PhoneNumber" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700">Location</label>
+                        <input type="text" name="Location" value="@Model.Address" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <button type="submit" class="w-full bg-[#2563EB] text-white py-3 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-md">
+                        Save Changes
+                    </button>
+                </form>
+            </main>
+        </div>
+    </body>
 </html>

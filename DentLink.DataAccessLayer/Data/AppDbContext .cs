@@ -1,10 +1,11 @@
 ﻿
 using DentLink.DataAccessLayer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DentLink.DataAccessLayer.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -19,6 +20,18 @@ namespace DentLink.DataAccessLayer.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Doctor>()
+               .HasOne(d => d.User)
+               .WithOne()
+               .HasForeignKey<Doctor>(d => d.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Patient>()
+                .HasOne(p => p.User)
+                .WithOne()
+                .HasForeignKey<Patient>(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<SendCaseRequest>()
                 .HasKey(s => new { s.DoctorId, s.CaseRequestId });

@@ -35,7 +35,8 @@
             </nav>
             <!-- Auth Buttons -->
             <div class="flex items-center gap-4">
-<button onclick="window.location.href='auth/login.html'" class="text-[#475569] font-medium border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-50 transition">Log In</button>                <a href="auth/role-selection.html" class="bg-[#2563EB] text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700">Get Started</a>
+                <button onclick="window.location.href='@Url.Action("Login", "Account")'" class="text-[#475569] font-medium border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-50 transition">Log In</button>             
+                <a href="@Url.Action("RoleSelection", "Account")" class="bg-[#2563EB] text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700">Get Started</a>
             </div>
         </div>
     </header>
@@ -56,11 +57,11 @@
                     DentLink bridges the gap between patients seeking quality, budget-friendly dental treatment and talented, supervised dental students who need clinical experience.
                 </p>
                 <div class="flex flex-wrap gap-4 pt-2">
-                    <button onclick="window.location.href='auth/signup.html'" class="flex items-center justify-center gap-3 bg-[#2563EB] text-white px-8 py-4 rounded-xl font-semibold text-base hover:bg-blue-700 transition duration-200 shadow-lg shadow-blue-100">
+                    <button onclick="window.location.href='@Url.Action("RegisterPatient", "Account")'" class="flex items-center justify-center gap-3 bg-[#2563EB] text-white px-8 py-4 rounded-xl font-semibold text-base hover:bg-blue-700 transition duration-200 shadow-lg shadow-blue-100">
     <i class="fa-solid fa-heart-pulse text-lg"></i>
     <span>I'm a Patient</span>
 </button>
-                    <a href="auth/doctor-signup.html" class="border border-white/40 bg-white/5 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:bg-white/10">
+                    <a href="@Url.Action("RegisterStudent", "Account")" class="border border-white/40 bg-white/5 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:bg-white/10">
                         <i class="fa-solid fa-graduation-cap"></i> I'm a Dental Student <i class="fa-solid fa-arrow-right text-sm"></i>
                     </a>
                 </div>

@@ -1,0 +1,127 @@
+﻿@model DentLink.PresentionLayer.Models.StudentRegisterViewModel
+@{
+    ViewData["Title"] = "Create Account - DentLink";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - DentLink</title>
+    <link rel="stylesheet" href="~/assets/css/auth.css">
+    <link rel="stylesheet" href="~/assets/css/responsive.css">
+</head>
+<body>
+    <div class="auth-split">
+        <aside class="auth-split-brand">
+            <a asp-controller="Home" asp-action="Index" class="auth-brand-logo"><span></span>DentLink</a>
+            <div class="auth-brand-content">
+                <h1>Better dental care starts here.</h1>
+                <p>Connect with verified dental students for affordable, supervised treatment across Egypt.</p>
+            </div>
+        </aside>
+
+        <main class="auth-split-form">
+            <div class="auth-form-wrapper">
+                <a asp-controller="Home" asp-action="Index" class="auth-back-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                    Back to home
+                </a>
+
+                <div class="auth-form-header">
+                    <h2>Create your account</h2>
+                    <p>Join DentLink as a dental student</p>
+                </div>
+
+                <form class="auth-form" asp-controller="Account" asp-action="RegisterStudent" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Name">Name</label>
+                        <input asp-for="Name" id="name" placeholder="Full name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email">Email Address</label>
+                        <input asp-for="Email" id="email" placeholder="you@example.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="University">University</label>
+                        <input asp-for="University" id="university" placeholder="e.g. Cairo University" />
+                        <span asp-validation-for="University" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="College">College</label>
+                        <input asp-for="College" id="college" placeholder="e.g. Faculty of Dentistry" />
+                        <span asp-validation-for="College" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="AcademicYear">Academic Year</label>
+                        <select asp-for="AcademicYear" id="academicYear">
+                            <option value="" disabled selected>Select year</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                            <option value="5">5th Year</option>
+                        </select>
+                        <span asp-validation-for="AcademicYear" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload your ID</label>
+                        <div class="file-upload" id="fileUpload">
+                            <input asp-for="StudentId" id="studentId" accept="image/*,.pdf" />
+                            <div class="file-upload-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" /></svg>
+                            </div>
+                            <div class="file-upload-text">
+                                <strong>Click to upload</strong> or drag and drop<br>
+                                PNG, JPG or PDF (max 5MB)
+                            </div>
+                            <div class="file-upload-name" id="fileName"></div>
+                        </div>
+                        <span asp-validation-for="StudentId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Password">Create Password</label>
+                        <div class="password-field">
+                            <input asp-for="Password" id="password" placeholder="••••••••" />
+                            <button type="button" class="password-toggle" data-target="password" aria-label="Toggle password visibility">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword">Confirm Password</label>
+                        <div class="password-field">
+                            <input asp-for="ConfirmPassword" id="confirmPassword" placeholder="••••••••" />
+                            <button type="button" class="password-toggle" data-target="confirmPassword" aria-label="Toggle password visibility">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
+                            </button>
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="auth-submit-btn">Create Account</button>
+                </form>
+
+                <p class="auth-form-footer">
+                    Already have an account? <a asp-controller="Account" asp-action="Login">Sign in</a>
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="~/assets/js/auth.js"></script>
+</body>
+</html>

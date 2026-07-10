@@ -1,251 +1,143 @@
-﻿<!DOCTYPE html>
+﻿@model List<DentLink.DataAccessLayer.Models.Patient>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DentLink - Patients Management</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Font: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-<body class="bg-[#F8FAFC] min-h-screen flex antialiased text-[#1E293B]">
+        body {
+        font-family: 'Inter', sans-serif;
+        }</style>
+    </head>
+    <body class="bg-[#F8FAFC] min-h-screen flex antialiased text-[#1E293B]">
 
-    <!-- SIDEBAR (موحد ومكتمل 100% مع صفحة المرضى الجديدة) -->
-    <aside class="w-64 bg-white border-r border-slate-100 flex flex-col justify-between h-screen sticky top-0 px-4 py-6 shrink-0">
-        <div class="space-y-7">
-            <!-- Logo -->
-            <div class="flex items-center gap-2 text-[#2563EB] font-bold text-xl px-2">
-            
-                 <span class="text-black">Dent<span class="text-[#2563EB]">Link</span></span>
+        <aside class="w-64 bg-white border-r border-slate-100 flex flex-col justify-between h-screen sticky top-0 px-4 py-6 shrink-0">
+            <div class="space-y-7">
+                <div class="flex items-center gap-2 text-[#2563EB] font-bold text-xl px-2">
+                    <span class="text-black">Dent<span class="text-[#2563EB]">Link</span></span>
+                </div>
+                <div class="px-2">
+                    <span class="text-[10px] tracking-wider font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded uppercase">Administrator</span>
+                </div>
+                <nav class="space-y-1">
+                    <a href="@Url.Action("Dashboard", "Admin")" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                        <i class="fa-solid fa-table-columns text-sm w-5"></i><span>Dashboard</span>
+                    </a>
+                    <a href="@Url.Action("DoctorApprovals", "Admin")" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                        <i class="fa-solid fa-user-check text-sm w-5"></i><span>Doctor Approvals</span>
+                    </a>
+                    <a href="@Url.Action("AdminDoctors", "Admin")" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                        <i class="fa-solid fa-user-doctor text-sm w-5"></i><span>Verified Doctors</span>
+                    </a>
+                    <a href="@Url.Action("AdminPatients", "Admin")" class="flex items-center gap-3 px-3 py-2.5 bg-[#EFF6FF] text-[#2563EB] font-semibold text-xs rounded-xl transition">
+                        <i class="fa-solid fa-users text-sm w-5"></i><span>Patients</span>
+                    </a>
+                    <a href="@Url.Action("AdminCases", "Admin")" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                        <i class="fa-regular fa-folder-open text-sm w-5"></i><span>Cases</span>
+                    </a>
+                </nav>
             </div>
-            
-            <div class="px-2">
-                <span class="text-[10px] tracking-wider font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded uppercase">Administrator</span>
+
+            <div class="border-t border-slate-100 pt-4 space-y-3">
+                <div class="flex items-center gap-2 px-2">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600"><i class="fa-solid fa-user-tie"></i></div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-800">@(User.Identity?.Name ?? "Admin")</h4>
+                        <p class="text-[10px] text-slate-400">Administrator</p>
+                    </div>
+                </div>
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="flex items-center gap-3 w-full px-3 py-2 text-slate-400 hover:text-rose-600 font-semibold text-xs rounded-xl transition">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-sm w-5"></i><span>Logout</span>
+                    </button>
+                </form>
             </div>
+        </aside>
 
-            <nav class="space-y-1">
-                <a href="admin-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
-                    <i class="fa-solid fa-table-columns text-sm w-5"></i><span>Dashboard</span>
-                </a>
-                <a href="doctor-approvals.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
-                    <i class="fa-solid fa-user-check text-sm w-5"></i><span>Doctor Approvals</span>
-                </a>
-                <a href="admin-doctors.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
-                    <i class="fa-solid fa-user-doctor text-sm w-5"></i><span>Verified Doctors</span>
-                </a>
-                <!-- Active Item: Patients -->
-                <a href="admin-patients.html" class="flex items-center gap-3 px-3 py-2.5 bg-[#EFF6FF] text-[#2563EB] font-semibold text-xs rounded-xl transition">
-                    <i class="fa-solid fa-users text-sm w-5"></i><span>Patients</span>
-                </a>
-                <a href="admin-cases.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
-                    <i class="fa-regular fa-folder-open text-sm w-5"></i><span>Cases</span>
-                </a>
-            </nav>
-        </div>
+        <div class="flex-1 flex flex-col min-w-0">
+            <header class="h-16 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40">
+                <h2 class="text-sm font-bold text-slate-800">Patients</h2>
+                <span class="text-xs font-semibold bg-slate-100 px-3 py-1 rounded-full text-slate-600" id="totalPatientsCounter">@(Model?.Count ?? 0) total</span>
+            </header>
 
-        <div class="border-t border-slate-100 pt-4 space-y-3">
-            <div class="flex items-center gap-2 px-2">
-                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600"><i class="fa-solid fa-user-tie"></i></div>
+            <main class="flex-1 px-8 py-8 space-y-6 max-w-7xl w-full">
                 <div>
-                    <h4 class="text-xs font-bold text-slate-800">Dr. Admin</h4>
-                    <p class="text-[10px] text-slate-400">Administrator</p>
+                    <h1 class="text-xl font-bold text-slate-900">Patients</h1>
+                    <p class="text-xs text-slate-400 font-medium mt-1">All registered patients on the platform.</p>
                 </div>
-            </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="patientSearchInput" oninput="filterPatients()" placeholder="Search by patient name or email..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl text-xs outline-none transition">
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-100 bg-slate-50/75 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                <th class="py-3.5 px-6">Name</th>
+                                <th class="py-3.5 px-6">Location</th>
+                                <th class="py-3.5 px-6">Cases</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patientsTableBody" class="divide-y divide-slate-50 text-xs font-medium text-slate-700">
+                            @if (Model != null)
+                            {
+                                foreach (var p in Model)
+                                {
+                                    var initials = string.Join("", (p.User?.FullName ?? "?").Split(' ').Where(s => s.Length > 0).Select(s => s[0])).ToUpper();
+                                    <tr class="patient-row hover:bg-slate-50/50 transition" data-name="@(p.User?.FullName?.ToLower())" data-email="@(p.User?.Email?.ToLower())">
+                                        <td class="py-4 px-6 flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">@initials</div>
+                                            <div>
+                                                <span class="block font-bold text-slate-900">@p.User?.FullName</span>
+                                                <span class="block text-[10px] text-[#2563EB] font-normal">@p.User?.Email</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6 text-slate-500"><i class="fa-solid fa-location-dot text-slate-300 mr-1.5"></i>@p.Address</td>
+                                        <td class="py-4 px-6">
+                                            <span class="bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-full text-[10px]">@(p.Cases?.Count ?? 0)</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <div id="patientEmptyState" class="hidden py-12 text-center space-y-2">
+                        <i class="fa-solid fa-users-slash text-slate-300 text-3xl"></i>
+                        <p class="text-xs font-medium text-slate-400">No patients found matching your search.</p>
+                    </div>
+                </div>
+            </main>
         </div>
-    </aside>
 
-    <!-- MAIN CONTENT AREA -->
-    <div class="flex-1 flex flex-col min-w-0">
-        <!-- Header -->
-        <header class="h-16 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40">
-            <h2 class="text-sm font-bold text-slate-800">Patients</h2>
-            <div class="flex items-center gap-4">
-                <span class="text-xs font-semibold bg-slate-100 px-3 py-1 rounded-full text-slate-600" id="totalPatientsCounter">5 total</span>
-            </div>
-        </header>
-
-        <!-- Main Container -->
-        <main class="flex-1 px-8 py-8 space-y-6 max-w-7xl w-full">
-            <div>
-                <h1 class="text-xl font-bold text-slate-900">Patients</h1>
-                <p class="text-xs text-slate-400 font-medium mt-1">All registered patients on the platform.</p>
-            </div>
-
-            <!-- 🔍 SEARCH & FILTER BAR -->
-            <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Search Box -->
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <input type="text" id="patientSearchInput" oninput="filterPatients()" placeholder="Search by patient name or email..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl text-xs outline-none transition">
-                </div>
-                <!-- Location Filter -->
-                <div class="relative">
-                    <i class="fa-solid fa-location-dot absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <select id="patientLocationFilter" onchange="filterPatients()" class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl text-xs outline-none transition appearance-none">
-                        <option value="">All Locations</option>
-                        <option value="Nasr City, Cairo">Nasr City, Cairo</option>
-                        <option value="Maadi, Cairo">Maadi, Cairo</option>
-                        <option value="Heliopolis, Cairo">Heliopolis, Cairo</option>
-                        <option value="Zamalek, Cairo">Zamalek, Cairo</option>
-                        <option value="New Cairo">New Cairo</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- 📊 DATA TABLE (منقول بالملّي من تصميم الفيجما image_7f1c83.png) -->
-            <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-slate-100 bg-slate-50/75 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                            <th class="py-3.5 px-6">Avatar Name</th>
-                            <th class="py-3.5 px-6">Location</th>
-                            <th class="py-3.5 px-6">Cases Joined</th>
-                        </tr>
-                    </thead>
-                    <tbody id="patientsTableBody" class="divide-y divide-slate-50 text-xs font-medium text-slate-700">
-                        
-                        <!-- Row 1: Sara Mohamed -->
-                        <tr class="patient-row hover:bg-slate-50/50 transition" data-name="Sara Mohamed" data-email="sara.m@example.com" data-location="Nasr City, Cairo">
-                            <td class="py-4 px-6 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center text-[10px] font-bold text-slate-600">SM</div>
-                                <div>
-                                    <span class="block font-bold text-slate-900">Sara Mohamed</span>
-                                    <span class="block text-[10px] text-[#2563EB] font-normal">sara.m@example.com</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 text-slate-500"><i class="fa-solid fa-location-dot text-slate-300 mr-1.5"></i>Nasr City, Cairo</td>
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-2">
-                                    <span class="bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-full text-[10px]">3</span>
-                                    <span class="text-[11px] text-slate-400 font-normal">May 10, 2026</span>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 2: Ahmed Hassan -->
-                        <tr class="patient-row hover:bg-slate-50/50 transition" data-name="Ahmed Hassan" data-email="ahmed.h@example.com" data-location="Maadi, Cairo">
-                            <td class="py-4 px-6 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center text-[10px] font-bold text-slate-600">AH</div>
-                                <div>
-                                    <span class="block font-bold text-slate-900">Ahmed Hassan</span>
-                                    <span class="block text-[10px] text-[#2563EB] font-normal">ahmed.h@example.com</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 text-slate-500"><i class="fa-solid fa-location-dot text-slate-300 mr-1.5"></i>Maadi, Cairo</td>
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-2">
-                                    <span class="bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-full text-[10px]">1</span>
-                                    <span class="text-[11px] text-slate-400 font-normal">May 22, 2026</span>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 3: Layla Hassan -->
-                        <tr class="patient-row hover:bg-slate-50/50 transition" data-name="Layla Hassan" data-email="layla.h@example.com" data-location="Heliopolis, Cairo">
-                            <td class="py-4 px-6 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center text-[10px] font-bold text-slate-600">LH</div>
-                                <div>
-                                    <span class="block font-bold text-slate-900">Layla Hassan</span>
-                                    <span class="block text-[10px] text-[#2563EB] font-normal">layla.h@example.com</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 text-slate-500"><i class="fa-solid fa-location-dot text-slate-300 mr-1.5"></i>Heliopolis, Cairo</td>
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-2">
-                                    <span class="bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-full text-[10px]">2</span>
-                                    <span class="text-[11px] text-slate-400 font-normal">Jun 1, 2026</span>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 4: Mostafa Ali -->
-                        <tr class="patient-row hover:bg-slate-50/50 transition" data-name="Mostafa Ali" data-email="most.ali@example.com" data-location="Zamalek, Cairo">
-                            <td class="py-4 px-6 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center text-[10px] font-bold text-slate-600">MA</div>
-                                <div>
-                                    <span class="block font-bold text-slate-900">Mostafa Ali</span>
-                                    <span class="block text-[10px] text-[#2563EB] font-normal">most.ali@example.com</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 text-slate-500"><i class="fa-solid fa-location-dot text-slate-300 mr-1.5"></i>Zamalek, Cairo</td>
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-2">
-                                    <span class="bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-full text-[10px]">1</span>
-                                    <span class="text-[11px] text-slate-400 font-normal">Jun 5, 2026</span>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 5: Yasmine Nour -->
-                        <tr class="patient-row hover:bg-slate-50/50 transition" data-name="Yasmine Nour" data-email="yas.n@example.com" data-location="New Cairo">
-                            <td class="py-4 px-6 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center text-[10px] font-bold text-slate-600">YN</div>
-                                <div>
-                                    <span class="block font-bold text-slate-900">Yasmine Nour</span>
-                                    <span class="block text-[10px] text-[#2563EB] font-normal">yas.n@example.com</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 text-slate-500"><i class="fa-solid fa-location-dot text-slate-300 mr-1.5"></i>New Cairo</td>
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-2">
-                                    <span class="bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-full text-[10px]">4</span>
-                                    <span class="text-[11px] text-slate-400 font-normal">Apr 30, 2026</span>
-                                </div>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-                <!-- Empty State -->
-                <div id="patientEmptyState" class="hidden py-12 text-center space-y-2">
-                    <i class="fa-solid fa-users-slash text-slate-300 text-3xl"></i>
-                    <p class="text-xs font-medium text-slate-400">No patients found matching your search.</p>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- JAVASCRIPT LIVE FILTERING LOGIC -->
-    <script>
-        function filterPatients() {
+        <script>
+            function filterPatients() {
             const searchVal = document.getElementById('patientSearchInput').value.toLowerCase();
-            const locationVal = document.getElementById('patientLocationFilter').value;
             const rows = document.querySelectorAll('.patient-row');
             const emptyState = document.getElementById('patientEmptyState');
-            
             let visibleCount = 0;
 
             rows.forEach(row => {
-                const name = row.getAttribute('data-name').toLowerCase();
-                const email = row.getAttribute('data-email').toLowerCase();
-                const loc = row.getAttribute('data-location');
-
-                const matchesSearch = name.includes(searchVal) || email.includes(searchVal);
-                const matchesLocation = locationVal === "" || loc === locationVal;
-
-                if (matchesSearch && matchesLocation) {
-                    row.classList.remove('hidden');
-                    visibleCount++;
-                } else {
-                    row.classList.add('hidden');
-                }
+            const name = row.getAttribute('data-name') || '';
+            const email = row.getAttribute('data-email') || '';
+            const matches = name.includes(searchVal) || email.includes(searchVal);
+            row.classList.toggle('hidden', !matches);
+            if (matches) visibleCount++;
             });
 
-            // Update Counter Top Header Text
             document.getElementById('totalPatientsCounter').innerText = `${visibleCount} total`;
-
-            if (visibleCount === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
+            emptyState.classList.toggle('hidden', visibleCount !== 0);
             }
-        }
-    </script>
-</body>
+        </script>
+    </body>
 </html>

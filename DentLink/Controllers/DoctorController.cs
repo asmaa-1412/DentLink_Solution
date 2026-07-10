@@ -1,5 +1,7 @@
 ﻿using DentLink.DataAccessLayer.Data;
+using DentLink.DataAccessLayer.Enums;
 using DentLink.DataAccessLayer.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,48 +10,44 @@ namespace DentLink.PresentionLayer.Controllers
     public class DoctorController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DoctorController(AppDbContext context)
+        public DoctorController(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager= userManager;
         }
 
         // ==========================================
-        // 1. Dashboard Action (مفتوحة دائماً للمشاهدة)
+        // 1. Dashboard Action
         // ==========================================
         public async Task<IActionResult> Dashboard()
         {
-            // جلب بيانات الدكتور الحالي (نعتبره ID 1 للتجربة)
             var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == 1);
 
-            // --- تم حذف شرط الـ Redirect بناءً على طلبك ---
-            // الآن الصفحة ستفتح مباشرة حتى لو IsApproved = false ليتمكن من المشاهدة
-
-            ViewBag.DoctorName = doctor?.FullName ?? "Omar Khaled";
-            // نمرر حالة الحساب للـ View ربما نحتاجها لعرض تنبيه بسيط فوق
+            ViewBag.DoctorName = doctor?.User.FullName ?? "Omar Khaled";
             ViewBag.IsApproved = doctor?.IsApproved ?? false;
 
-            // حساب العدادات الحية
-            ViewBag.AvailableCasesCount = await _context.Cases.CountAsync(c => c.status == "Available");
-            ViewBag.AcceptedRequestsCount = await _context.CaseRequests.CountAsync(cr => cr.status == "Accepted");
-            ViewBag.CompletedSessionsCount = await _context.Sessions.CountAsync(s => s.status == "completed");
+            // "Available" = Pending حسب الـ enum عندنا
+            ViewBag.AvailableCasesCount = await _context.Cases.CountAsync(c => c.status == Status.Pending);
+            // "Accepted" = Active حسب الـ enum عندنا
+            ViewBag.AcceptedRequestsCount = await _context.CaseRequests.CountAsync(cr => cr.status == Status.Active);
+            ViewBag.CompletedSessionsCount = await _context.Sessions.CountAsync(s => s.Status == "completed");
 
-            // جلب الأنشطة الأخيرة (الطلبات المقدمة)
             var recentRequests = await _context.SendCaseRequests
                 .Include(s => s.CaseRequest)
                     .ThenInclude(cr => cr.Case)
-                .OrderByDescending(s => s.CaseRequest.CreatedAt)
+                .OrderByDescending(s => s.CaseRequest.RequestedAt)
                 .Take(3)
                 .ToListAsync();
             ViewBag.RecentRequests = recentRequests;
 
-            // جلب الجلسات القادمة غير المنتهية
             var upcomingSessions = await _context.Sessions
                 .Include(s => s.CaseRequest)
                     .ThenInclude(cr => cr.Case)
                         .ThenInclude(c => c.Patient)
-                .Where(s => s.status != "completed")
-                .OrderBy(s => s.SessionDate)
+                .Where(s => s.Status != "completed")
+                .OrderBy(s => s.SessionStart) // كان SessionDate وهي مش موجودة
                 .Take(3)
                 .ToListAsync();
 
@@ -61,49 +59,47 @@ namespace DentLink.PresentionLayer.Controllers
         // ==========================================
         public IActionResult UnderReview()
         {
-            // صفحة ثابتة تعرض رسالة الانتظار
             return View();
         }
 
         // ==========================================
-        // 3. Available Cases Action (مفتوحة للمشاهدة)
+        // 3. Available Cases Action
         // ==========================================
         public async Task<IActionResult> AvailableCases(string searchQuery, string selectedType)
         {
-            // 1. جلب الحالات المتاحة كـ Queryable لتجهيز الفلاتر
             var casesQuery = _context.Cases
                 .Include(c => c.Patient)
-                .Where(c => c.status == "Available")
+                .Where(c => c.status == Status.Pending)
                 .AsQueryable();
 
-            // 2. فلترة بالبحث (مع تحويل الكلمات لـ Lowercase لتجنب حساسية الحروف الكبيرة والصغيرة)
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 string searchLower = searchQuery.ToLower().Trim();
 
                 casesQuery = casesQuery.Where(c =>
-                    c.Type.ToLower().Contains(searchLower) ||
+                    c.Typies.ToString().ToLower().Contains(searchLower) ||
                     c.Description.ToLower().Contains(searchLower)
                 );
             }
 
-            // 3. فلترة بالتصنيف (Category Buttons)
             if (!string.IsNullOrEmpty(selectedType) && selectedType != "All")
             {
-                casesQuery = casesQuery.Where(c => c.Type == selectedType);
+                if (Enum.TryParse<Typies>(selectedType, out var typeEnum))
+                {
+                    casesQuery = casesQuery.Where(c => c.Typies == typeEnum);
+                }
             }
 
-            // 4. تنفيذ الاستعلام وترتيب الأحدث أولاً
             var availableCases = await casesQuery
                 .OrderByDescending(c => c.CreatedAt)
                 .ToListAsync();
 
-            // 5. تمرير القيم للـ View عشان خانة البحث والـ Active Button يفضلوا محتفظين بحالتهم
             ViewBag.CurrentSearch = searchQuery;
             ViewBag.CurrentType = string.IsNullOrEmpty(selectedType) ? "All" : selectedType;
 
             return View(availableCases);
         }
+
         // --- أكشن حساس: يحتاج موافقة الأدمن ---
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -111,15 +107,12 @@ namespace DentLink.PresentionLayer.Controllers
         {
             int currentDoctorId = 1;
 
-            // 1. التشخيص: هل الدكتور مؤكد من الأدمن؟
             var doctor = await _context.Doctors.FindAsync(currentDoctorId);
             if (doctor == null || !doctor.IsApproved)
             {
-                // إذا لم يكن مؤكداً، نمنعه ونرجعه لصفحة المراجعة
                 return RedirectToAction(nameof(UnderReview));
             }
 
-            // 2. كود التنفيذ الطبيعي (لا ينفذ إلا إذا كان مؤكداً)
             bool alreadyRequested = await _context.SendCaseRequests
                 .AnyAsync(s => s.DoctorId == currentDoctorId && s.CaseRequest.CaseId == caseId);
 
@@ -131,9 +124,9 @@ namespace DentLink.PresentionLayer.Controllers
             var newRequest = new CaseRequest
             {
                 CaseId = caseId,
-                status = "pending",
+                status = Status.Pending, // كانت "pending" (string)
                 TransportCost = transportCost,
-                CreatedAt = DateTime.UtcNow
+                RequestedAt = DateTime.UtcNow
             };
             _context.CaseRequests.Add(newRequest);
             await _context.SaveChangesAsync();
@@ -150,7 +143,7 @@ namespace DentLink.PresentionLayer.Controllers
         }
 
         // ==========================================
-        // 4. Sessions Action (مفتوحة للمشاهدة)
+        // 4. Sessions Action
         // ==========================================
         public async Task<IActionResult> Sessions()
         {
@@ -161,7 +154,7 @@ namespace DentLink.PresentionLayer.Controllers
                     .ThenInclude(cr => cr.Case)
                         .ThenInclude(c => c.Patient)
                 .Where(session => session.CaseRequest.SendCaseRequests.Any(s => s.DoctorId == currentDoctorId))
-                .OrderByDescending(session => session.st)
+                .OrderByDescending(session => session.SessionStart) // كان session.st (خطأ إملائي)
                 .ToListAsync();
 
             return View(doctorSessions);
@@ -174,18 +167,16 @@ namespace DentLink.PresentionLayer.Controllers
         {
             int currentDoctorId = 1;
 
-            // 1. التشخيص: هل الدكتور مؤكد؟
             var doctor = await _context.Doctors.FindAsync(currentDoctorId);
             if (doctor == null || !doctor.IsApproved)
             {
                 return RedirectToAction(nameof(UnderReview));
             }
 
-            // 2. كود التنفيذ الطبيعي
             var session = await _context.Sessions.FindAsync(sessionId);
             if (session != null)
             {
-                session.IsPatientArrived = true;
+                session.PatientArrived = true; // كانت IsPatientArrived (مش موجودة)
                 session.Status = "in progress";
                 session.ActualStartTime = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
@@ -200,19 +191,16 @@ namespace DentLink.PresentionLayer.Controllers
         {
             int currentDoctorId = 1;
 
-            // 1. التشخيص: هل الدكتور مؤكد؟
             var doctor = await _context.Doctors.FindAsync(currentDoctorId);
             if (doctor == null || !doctor.IsApproved)
             {
                 return RedirectToAction(nameof(UnderReview));
             }
 
-            // 2. كود التنفيذ الطبيعي
             var session = await _context.Sessions.FindAsync(sessionId);
             if (session != null)
             {
-                session.IsCompleted = true;
-                session.Status = "completed";
+                session.Status = "completed"; // شالينا IsCompleted (مش موجودة)
                 session.ActualEndTime = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
             }
@@ -220,17 +208,45 @@ namespace DentLink.PresentionLayer.Controllers
         }
 
         // ==========================================
-        // 5. Profile Actions (مفتوحة للتعديل في أي وقت)
+        // 5. Profile Actions
         // ==========================================
 
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
-            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == 1);
+            var doctor = await _context.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == 1);
+
             if (doctor == null)
             {
-                doctor = new Doctor { FullName = "Omar Khaled", Email = "omar.k@cu.edu.eg" };
+                
+                var user = new ApplicationUser
+                {
+                    FullName = "Omar Khaled",
+                    Email = "omar.k@cu.edu.eg",
+                    UserName = "omar.k@cu.edu.eg" 
+                };
+
+                var result = await _userManager.CreateAsync(user, "P@ssw0rd123"); 
+
+                if (!result.Succeeded)
+                {
+                    
+                    foreach (var error in result.Errors)
+                        ModelState.AddModelError("", error.Description);
+
+                    return View();
+                }
+                
+                doctor = new Doctor
+                {
+                    UserId = user.Id,
+                    University = "Cairo University"
+                };
+
+                _context.Doctors.Add(doctor);
+                await _context.SaveChangesAsync();
             }
+
             return View(doctor);
         }
 
@@ -241,7 +257,6 @@ namespace DentLink.PresentionLayer.Controllers
             var doctorInDb = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == updatedDoctor.Id);
             if (doctorInDb == null) return NotFound();
 
-            // معالجة رفع الصورة
             if (ProfilePictureFile != null && ProfilePictureFile.Length > 0)
             {
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
@@ -258,8 +273,7 @@ namespace DentLink.PresentionLayer.Controllers
                 doctorInDb.ProfilePicture = "/images/" + uniqueFileName;
             }
 
-            // تحديث باقي البيانات
-            doctorInDb.FullName = updatedDoctor.FullName;
+            doctorInDb.User.FullName = updatedDoctor.User.FullName;
             doctorInDb.University = updatedDoctor.University;
             doctorInDb.Department = updatedDoctor.Department;
             doctorInDb.AcademicYear = updatedDoctor.AcademicYear;

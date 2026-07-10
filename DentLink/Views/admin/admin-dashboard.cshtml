@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@model DentLink.BusinessLogicLayer.DTOs.AdminDTOs.AdminDashboardDto
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,186 +11,176 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
-</head>
-<body class="bg-[#F8FAFC] min-h-screen flex antialiased text-[#1E293B]">
+    <style>
+        body {
+        font-family: 'Inter', sans-serif;
+        }</style>
+    </head>
+    <body class="bg-[#F8FAFC] min-h-screen flex antialiased text-[#1E293B]">
 
-    <aside class="w-64 bg-white border-r border-slate-100 flex flex-col justify-between h-screen sticky top-0 px-4 py-6 shrink-0">
-        <div class="space-y-7">
-            <div class="flex items-center gap-2 text-[#2563EB] font-bold text-xl px-2">
-              
-                  <span class="text-black">Dent<span class="text-[#2563EB]">Link</span></span>
+        <aside class="w-64 bg-white border-r border-slate-100 flex flex-col justify-between h-screen sticky top-0 px-4 py-6 shrink-0">
+            <div class="space-y-7">
+                <div class="flex items-center gap-2 text-[#2563EB] font-bold text-xl px-2">
+                    <span class="text-black">Dent<span class="text-[#2563EB]">Link</span></span>
+                </div>
+                <div class="px-2">
+                    <span class="text-[10px] tracking-wider font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded uppercase">Administrator</span>
+                </div>
+                <nav class="space-y-1">
+                    <a href="@Url.Action("Dashboard", "Admin")" class="flex items-center gap-3 px-3 py-2.5 bg-[#EFF6FF] text-[#2563EB] font-semibold text-xs rounded-xl transition">
+                        <i class="fa-solid fa-table-columns text-sm w-5"></i><span>Dashboard</span>
+                    </a>
+                    <a href="@Url.Action("DoctorApprovals", "Admin")" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                        <i class="fa-solid fa-user-check text-sm w-5"></i><span>Doctor Approvals</span>
+                        @if (Model.PendingDoctorsCount > 0)
+                        {
+                            <span class="ml-auto bg-amber-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">@Model.PendingDoctorsCount</span>
+                        }
+                    </a>
+                    <a href="@Url.Action("AdminDoctors", "Admin")" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                        <i class="fa-solid fa-user-doctor text-sm w-5"></i><span>Verified Doctors</span>
+                    </a>
+                    <a href="@Url.Action("AdminPatients", "Admin")" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                        <i class="fa-solid fa-users text-sm w-5"></i><span>Patients</span>
+                    </a>
+                    <a href="@Url.Action("AdminCases", "Admin")" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
+                        <i class="fa-regular fa-folder-open text-sm w-5"></i><span>Cases</span>
+                    </a>
+                </nav>
             </div>
-            
-            <div class="px-2">
-                <span class="text-[10px] tracking-wider font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded uppercase">Administrator</span>
+
+            <div class="border-t border-slate-100 pt-4 space-y-3">
+                <div class="flex items-center gap-2 px-2">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600"><i class="fa-solid fa-user-tie"></i></div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-800">@(User.Identity?.Name ?? "Admin")</h4>
+                        <p class="text-[10px] text-slate-400">Administrator</p>
+                    </div>
+                </div>
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="flex items-center gap-3 w-full px-3 py-2 text-slate-400 hover:text-rose-600 font-semibold text-xs rounded-xl transition">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-sm w-5"></i><span>Logout</span>
+                    </button>
+                </form>
             </div>
+        </aside>
 
-            <nav class="space-y-1">
-                <a href="admin-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 bg-[#EFF6FF] text-[#2563EB] font-semibold text-xs rounded-xl transition">
-                    <i class="fa-solid fa-table-columns text-sm w-5"></i><span>Dashboard</span>
-                </a>
-                <a href="doctor-approvals.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
-                    <i class="fa-solid fa-user-check text-sm w-5"></i><span>Doctor Approvals</span>
-                </a>
-                <a href="admin-doctors.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
-                    <i class="fa-solid fa-user-doctor text-sm w-5"></i><span>Verified Doctors</span>
-                </a>
-                <a href="admin-patients.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
-                    <i class="fa-solid fa-users text-sm w-5"></i><span>Patients</span>
-                </a>
-                <a href="admin-cases.html" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] hover:bg-slate-50 font-medium text-xs rounded-xl transition">
-                    <i class="fa-regular fa-folder-open text-sm w-5"></i><span>Cases</span>
-                </a>
-            </nav>
-        </div>
+        <div class="flex-1 flex flex-col min-w-0">
+            <header class="h-16 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40">
+                <h2 class="text-sm font-bold text-slate-800">Dashboard</h2>
+            </header>
 
-        <div class="border-t border-slate-100 pt-4 space-y-3">
-            <div class="flex items-center gap-2 px-2">
-                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600"><i class="fa-solid fa-user-tie"></i></div>
+            <main class="flex-1 px-8 py-8 space-y-8 max-w-7xl w-full">
                 <div>
-                    <h4 class="text-xs font-bold text-slate-800">Dr. Admin</h4>
-                    <p class="text-[10px] text-slate-400">Administrator</p>
+                    <h1 class="text-xl font-bold text-slate-900">Admin Dashboard</h1>
+                    <p class="text-xs text-slate-400 font-medium mt-1">Platform overview and management controls</p>
                 </div>
-            </div>
+
+                <div class="grid sm:grid-cols-4 gap-6">
+                    <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-3">
+                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center text-xs"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <div>
+                            <span class="text-2xl font-bold text-slate-900 block">@Model.TotalDoctorsCount</span>
+                            <span class="text-xs text-slate-800 font-semibold mt-1 block">Total Doctors</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-3">
+                        <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-xs"><i class="fa-regular fa-bell"></i></div>
+                        <div>
+                            <span class="text-2xl font-bold text-slate-900 block">@Model.PendingDoctorsCount</span>
+                            <span class="text-xs text-slate-800 font-semibold mt-1 block">Pending Doctors</span>
+                            @if (Model.PendingDoctorsCount > 0)
+                            {
+                                <span class="text-[10px] text-amber-500 font-medium bg-amber-50/60 px-1.5 py-0.5 rounded">Needs review</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-3">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-xs"><i class="fa-solid fa-user-group"></i></div>
+                        <div>
+                            <span class="text-2xl font-bold text-slate-900 block">@Model.TotalPatientsCount</span>
+                            <span class="text-xs text-slate-800 font-semibold mt-1 block">Total Patients</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-3">
+                        <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center text-xs"><i class="fa-regular fa-folder"></i></div>
+                        <div>
+                            <span class="text-2xl font-bold text-slate-900 block">@Model.TotalCasesCount</span>
+                            <span class="text-xs text-slate-800 font-semibold mt-1 block">Total Cases</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Pending Approvals</h3>
+                            <span class="w-5 h-5 bg-amber-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center">@Model.PendingDoctorsCount</span>
+                        </div>
+
+                        @if (Model.PendingDoctors.Any())
+                        {
+                            <div class="divide-y divide-slate-50">
+                                @foreach (var d in Model.PendingDoctors)
+                                {
+                                    var initials = string.Join("", (d.FullName ?? "?").Split(' ').Where(s => s.Length > 0).Select(s => s[0])).ToUpper();
+                                    <div class="flex items-center justify-between py-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-xs text-slate-600">@initials</div>
+                                            <div>
+                                                <h4 class="text-xs font-bold text-slate-800">@d.FullName</h4>
+                                                <p class="text-[10px] text-slate-400 font-medium">@d.University • @d.AcademicYear</p>
+                                            </div>
+                                        </div>
+                                        <a href="@Url.Action("DoctorApprovals", "Admin")" class="text-[10px] text-[#2563EB] font-bold hover:underline">Review</a>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-xs text-slate-400 text-center py-6">No pending approvals.</p>
+                        }
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recent Cases</h3>
+
+                        @if (Model.RecentCases.Any())
+                        {
+                            <div class="space-y-3">
+                                @foreach (var c in Model.RecentCases)
+                                {
+                                    string badgeClass = c.Status switch
+                                    {
+                                        DentLink.DataAccessLayer.Enums.Status.Pending => "bg-amber-50 text-amber-600",
+                                        DentLink.DataAccessLayer.Enums.Status.Active => "bg-blue-50 text-blue-600",
+                                        DentLink.DataAccessLayer.Enums.Status.Completed => "bg-emerald-50 text-emerald-600",
+                                        _ => "bg-slate-50 text-slate-600"
+                                    };
+                                    <div class="flex items-center justify-between p-3 border border-slate-50 rounded-xl bg-slate-50/30">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center text-xs"><i class="fa-regular fa-folder"></i></div>
+                                            <div>
+                                                <h4 class="text-xs font-bold text-slate-800">@c.CaseType — @c.PatientName</h4>
+                                                <p class="text-[10px] text-slate-400 font-medium">Student: @(c.StudentName ?? "Not assigned yet")</p>
+                                            </div>
+                                        </div>
+                                        <span class="text-[9px] font-bold @badgeClass px-2 py-0.5 rounded-full uppercase">@c.Status</span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-xs text-slate-400 text-center py-6">No cases yet.</p>
+                        }
+                    </div>
+                </div>
+            </main>
         </div>
-    </aside>
-
-    <div class="flex-1 flex flex-col min-w-0">
-        <header class="h-16 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40">
-            <h2 class="text-sm font-bold text-slate-800">Dashboard</h2>
-            <div class="flex items-center gap-4">
-                <button class="text-slate-400 hover:text-slate-600 relative p-1.5">
-                    <i class="fa-regular fa-bell text-lg"></i><span class="absolute top-1 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
-                </button>
-                <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center"><i class="fa-solid fa-user-tie text-xs text-slate-600"></i></div>
-            </div>
-        </header>
-
-        <main class="flex-1 px-8 py-8 space-y-8 max-w-7xl w-full">
-            <div>
-                <h1 class="text-xl font-bold text-slate-900">Admin Dashboard</h1>
-                <p class="text-xs text-slate-400 font-medium mt-1">Platform overview and management controls</p>
-            </div>
-
-            <div class="grid sm:grid-cols-4 gap-6">
-                <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-3">
-                    <div class="w-8 h-8 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center text-xs"><i class="fa-solid fa-graduation-cap"></i></div>
-                    <div>
-                        <span class="text-2xl font-bold text-slate-900 block">45</span>
-                        <span class="text-xs text-slate-800 font-semibold mt-1 block">Total Doctors</span>
-                        <span class="text-[10px] text-slate-400 font-medium"><i class="fa-solid fa-arrow-trend-up text-blue-500 mr-1"></i>+4 this month</span>
-                    </div>
-                </div>
-
-                <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-3">
-                    <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-xs"><i class="fa-regular fa-bell"></i></div>
-                    <div>
-                        <span class="text-2xl font-bold text-slate-900 block">8</span>
-                        <span class="text-xs text-slate-800 font-semibold mt-1 block">Pending Doctors</span>
-                        <span class="text-[10px] text-amber-500 font-medium bg-amber-50/60 px-1.5 py-0.5 rounded">Needs review</span>
-                    </div>
-                </div>
-
-                <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-3">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-xs"><i class="fa-solid fa-user-group"></i></div>
-                    <div>
-                        <span class="text-2xl font-bold text-slate-900 block">234</span>
-                        <span class="text-xs text-slate-800 font-semibold mt-1 block">Total Patients</span>
-                        <span class="text-[10px] text-slate-400 font-medium"><i class="fa-solid fa-arrow-trend-up text-emerald-500 mr-1"></i>+18 this month</span>
-                    </div>
-                </div>
-
-                <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-3">
-                    <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center text-xs"><i class="fa-regular fa-folder"></i></div>
-                    <div>
-                        <span class="text-2xl font-bold text-slate-900 block">189</span>
-                        <span class="text-xs text-slate-800 font-semibold mt-1 block">Total Cases</span>
-                        <span class="text-[10px] text-slate-400 font-medium"><i class="fa-solid fa-arrow-trend-up text-purple-500 mr-1"></i>+12 active</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid lg:grid-cols-2 gap-6">
-                <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Pending Approvals</h3>
-                        <span class="w-5 h-5 bg-amber-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center">8</span>
-                    </div>
-                    
-                    <div class="divide-y divide-slate-50">
-                        <div class="flex items-center justify-between py-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-xs text-slate-600">OK</div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-slate-800">Omar Khaled</h4>
-                                    <p class="text-[10px] text-slate-400 font-medium">Cairo University • 4th Year</p>
-                                </div>
-                            </div>
-                            <span class="text-[10px] text-slate-400 font-semibold">Jun 18, 2026</span>
-                        </div>
-                        <div class="flex items-center justify-between py-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-xs text-slate-600">NI</div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-slate-800">Nour Ibrahim</h4>
-                                    <p class="text-[10px] text-slate-400 font-medium">Ain Shams University • 5th Year</p>
-                                </div>
-                            </div>
-                            <span class="text-[10px] text-slate-400 font-semibold">Jun 17, 2026</span>
-                        </div>
-                        <div class="flex items-center justify-between py-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-xs text-slate-600">KS</div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-slate-800">Karim Saad</h4>
-                                    <p class="text-[10px] text-slate-400 font-medium">Alexandria University • 3rd Year</p>
-                                </div>
-                            </div>
-                            <span class="text-[10px] text-slate-400 font-semibold">Jun 16, 2026</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recent Cases</h3>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between p-3 border border-slate-50 rounded-xl bg-slate-50/30">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center text-xs"><i class="fa-regular fa-folder"></i></div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-slate-800">Filling — Sara Mohamed</h4>
-                                    <p class="text-[10px] text-slate-400 font-medium">Student: Omar Khaled</p>
-                                </div>
-                            </div>
-                            <span class="text-[9px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase">active</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 border border-slate-50 rounded-xl bg-slate-50/30">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center text-xs"><i class="fa-regular fa-folder"></i></div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-slate-800">Extraction — Ahmed Hassan</h4>
-                                    <p class="text-[10px] text-slate-400 font-medium">Student: Nour Ibrahim</p>
-                                </div>
-                            </div>
-                            <span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase">completed</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 border border-slate-50 rounded-xl bg-slate-50/30">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-xl bg-blue-50 text-[#2563EB] flex items-center justify-center text-xs"><i class="fa-regular fa-folder"></i></div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-slate-800">Cleaning — Layla Hassan</h4>
-                                    <p class="text-[10px] text-slate-400 font-medium">Student: Karim Saad</p>
-                                </div>
-                            </div>
-                            <span class="text-[9px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full uppercase">pending</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-</body>
+    </body>
 </html>

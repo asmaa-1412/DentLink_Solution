@@ -10,12 +10,16 @@ namespace DentLink.DataAccessLayer.Models
         [Required]
         [ForeignKey(nameof(CaseRequest))]
         public int CaseRequestId { get; set; }
+        public string Status { get; set; } = "pending";
+        public bool PatientArrived { get; set; } = false;
 
         public DateTime SessionStart { get; set; }
 
         public DateTime? SessionEnd { get; set; }
 
-        public bool PatientArrived { get; set; } = false;
+        
+        public DateTime? ActualStartTime { get; set; }
+        public DateTime? ActualEndTime { get; set; }
 
         // Navigation
         public CaseRequest? CaseRequest { get; set; }

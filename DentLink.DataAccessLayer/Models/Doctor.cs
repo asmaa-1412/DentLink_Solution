@@ -8,20 +8,14 @@ namespace DentLink.DataAccessLayer.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public string FullName { get; set; }
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; } 
 
         [Required]
         [StringLength(100)]
         public string University { get; set; }
 
         public string Department { get; set; }
-
-        public string Phone { get; set; }
 
         public string AcademicYear { get; set; }
 

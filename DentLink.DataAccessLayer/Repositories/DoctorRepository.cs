@@ -22,7 +22,7 @@ namespace DentLink.DataAccessLayer.Repositories
         {
             return await _context.Doctors
                 .Where(d => !d.IsApproved)
-                .OrderBy(d => d.FullName)
+                .OrderBy(d => d.User.FullName)
                 .ToListAsync();
         }
         public async Task<Doctor> GetDoctorWithCaseRequestsAsync(int doctorId)

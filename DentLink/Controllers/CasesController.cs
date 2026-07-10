@@ -15,9 +15,15 @@ namespace DentLink.PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create(int patientId)
         {
-            return View();
+            if (patientId <= 0) return BadRequest("Invalid patient.");
+
+            ViewBag.PatientId = patientId;
+            ViewBag.CaseTypes = Enum.GetValues(typeof(DentLink.DataAccessLayer.Enums.Typies))
+                .Cast<DentLink.DataAccessLayer.Enums.Typies>();
+
+            return View("~/Views/Patient/Create.cshtml");
         }
 
         [HttpPost]
@@ -27,7 +33,10 @@ namespace DentLink.PresentationLayer.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View(caseDto);
+                ViewBag.PatientId = caseDto.PatientId;
+                ViewBag.CaseTypes = Enum.GetValues(typeof(DentLink.DataAccessLayer.Enums.Typies))
+                    .Cast<DentLink.DataAccessLayer.Enums.Typies>();
+                return View("~/Views/Patient/Create.cshtml", caseDto);
             }
 
             string savedImageUrl = null;
@@ -65,11 +74,18 @@ namespace DentLink.PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyCases(int id) 
+        public async Task<IActionResult> MyCases(int id)
         {
             var cases = await _unitOfWork.Repository<Case>().FindAsync(c => c.PatientId == id);
+            var casesList = (cases ?? Enumerable.Empty<Case>()).OrderByDescending(c => c.Id).ToList();
 
-            return View(cases);
+            var patient = await _unitOfWork.Repository<Patient>()
+                .GetEntityWithSpec(p => p.Id == id, p => p.User);
+
+            ViewBag.PatientId = id;
+            ViewBag.PatientName = patient?.User?.FullName;
+
+            return View("~/Views/Patient/my-cases.cshtml", casesList);
         }
     }
 }

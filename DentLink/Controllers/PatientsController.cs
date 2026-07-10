@@ -1,26 +1,38 @@
 ﻿using DentLink.BusinessLogicLayer.DTOs.PatientDTOs;
 using DentLink.DataAccessLayer.Contracts;
+using DentLink.DataAccessLayer.Data;
 using DentLink.DataAccessLayer.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DentLink.PresentationLayer.Controllers
 {
     public class PatientsController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly AppDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PatientsController(IUnitOfWork unitOfWork)
+        public PatientsController(IUnitOfWork unitOfWork, AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _context=context;
+            _userManager = userManager;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Profile(int id) 
+        public async Task<IActionResult> Profile(int id)
         {
-            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(id);
+            var patient = await _unitOfWork.Repository<Patient>()
+                .GetEntityWithSpec(p => p.Id == id, p => p.User);
+
             if (patient == null) return NotFound();
 
-            return View(patient);
+            ViewBag.PatientId = patient.Id;
+
+            return View("~/Views/Patient/profile.cshtml", patient);
         }
 
         [HttpPost]
@@ -28,15 +40,18 @@ namespace DentLink.PresentationLayer.Controllers
         {
             if (model == null) return BadRequest("Data Is null!");
 
-            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(id);
+            var patient = await _unitOfWork.Repository<Patient>()
+                .GetEntityWithSpec(p => p.Id == id, p => p.User);
+
             if (patient == null) return NotFound();
 
             if (!ModelState.IsValid)
             {
-                return View(patient);
+                ViewBag.PatientId = patient.Id;
+                return View("~/Views/Patient/profile.cshtml", patient);
             }
 
-            patient.FullName = model.FullName;
+            patient.User.FullName = model.FullName;
             patient.Address = model.Location;
 
             if (model.ImageUrl != null && model.ImageUrl.Length > 0)
