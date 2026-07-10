@@ -20,7 +20,7 @@ namespace DentLink.PresentationLayer.Controllers
             if (patientId <= 0) return BadRequest("Invalid patient.");
 
             ViewBag.PatientId = patientId;
-            ViewBag.CaseTypes = Enum.GetValues(typeof(DentLink.DataAccessLayer.Enums.Typies))
+            ViewBag.CaseTypes = Enum.GetValues(typeof(DataAccessLayer.Enums.Typies))
                 .Cast<DentLink.DataAccessLayer.Enums.Typies>();
 
             return View("~/Views/Patient/Create.cshtml");
@@ -34,7 +34,7 @@ namespace DentLink.PresentationLayer.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.PatientId = caseDto.PatientId;
-                ViewBag.CaseTypes = Enum.GetValues(typeof(DentLink.DataAccessLayer.Enums.Typies))
+                ViewBag.CaseTypes = Enum.GetValues(typeof(DataAccessLayer.Enums.Typies))
                     .Cast<DentLink.DataAccessLayer.Enums.Typies>();
                 return View("~/Views/Patient/Create.cshtml", caseDto);
             }
@@ -84,6 +84,7 @@ namespace DentLink.PresentationLayer.Controllers
 
             ViewBag.PatientId = id;
             ViewBag.PatientName = patient?.User?.FullName;
+            ViewBag.PatientImageUrl = patient?.ImageUrl; 
 
             return View("~/Views/Patient/my-cases.cshtml", casesList);
         }

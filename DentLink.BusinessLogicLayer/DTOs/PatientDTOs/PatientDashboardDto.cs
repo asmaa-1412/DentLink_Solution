@@ -16,7 +16,9 @@ namespace DentLink.BusinessLogicLayer.DTOs.PatientDTOs
 
         public int CompletedSessionsCount { get; set; }
         public DateTime? LastCompletedSessionDate { get; set; }
+        public string ImageUrl { get; set; } 
 
         public IEnumerable<Case> RecentCases { get; set; }
     }
 }
+

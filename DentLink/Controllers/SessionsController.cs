@@ -54,6 +54,7 @@ namespace DentLink.PresentationLayer.Controllers
             {
                 PatientId = patient.Id,
                 PatientName = patient.User?.FullName,
+                ImageUrl = patient.ImageUrl,
                 MyCasesCount = myCasesList.Count,
                 ActiveCasesCount = activeCasesCount,
                 CompletedCasesCount = completedCasesCount,
