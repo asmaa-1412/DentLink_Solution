@@ -15,11 +15,17 @@ namespace DentLink.PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create(int patientId)
+        public async Task<IActionResult> Create(int patientId)
         {
             if (patientId <= 0) return BadRequest("Invalid patient.");
 
+            var patient = await _unitOfWork.Repository<Patient>()
+                .GetEntityWithSpec(p => p.Id == patientId, p => p.User);
+
             ViewBag.PatientId = patientId;
+            ViewBag.PatientName = patient?.User?.FullName;
+            ViewBag.PatientImageUrl = patient?.ImageUrl;
+
             ViewBag.CaseTypes = Enum.GetValues(typeof(DataAccessLayer.Enums.Typies))
                 .Cast<DentLink.DataAccessLayer.Enums.Typies>();
 
@@ -33,9 +39,16 @@ namespace DentLink.PresentationLayer.Controllers
 
             if (!ModelState.IsValid)
             {
+                var patient = await _unitOfWork.Repository<Patient>()
+                    .GetEntityWithSpec(p => p.Id == caseDto.PatientId, p => p.User);
+
                 ViewBag.PatientId = caseDto.PatientId;
+                ViewBag.PatientName = patient?.User?.FullName;
+                ViewBag.PatientImageUrl = patient?.ImageUrl;
+
                 ViewBag.CaseTypes = Enum.GetValues(typeof(DataAccessLayer.Enums.Typies))
                     .Cast<DentLink.DataAccessLayer.Enums.Typies>();
+
                 return View("~/Views/Patient/Create.cshtml", caseDto);
             }
 
@@ -84,7 +97,7 @@ namespace DentLink.PresentationLayer.Controllers
 
             ViewBag.PatientId = id;
             ViewBag.PatientName = patient?.User?.FullName;
-            ViewBag.PatientImageUrl = patient?.ImageUrl; 
+            ViewBag.PatientImageUrl = patient?.ImageUrl;
 
             return View("~/Views/Patient/my-cases.cshtml", casesList);
         }
