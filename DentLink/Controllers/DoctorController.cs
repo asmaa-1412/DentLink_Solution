@@ -1,12 +1,15 @@
-﻿using DentLink.DataAccessLayer.Data;
+﻿using DentLink.BusinessLogicLayer.DTOs.Doctordtos;
+using DentLink.DataAccessLayer.Data;
 using DentLink.DataAccessLayer.Enums;
 using DentLink.DataAccessLayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DentLink.PresentionLayer.Controllers
 {
+    [Authorize(Roles = "Student")]
     public class DoctorController : Controller
     {
         private readonly AppDbContext _context;
@@ -15,254 +18,314 @@ namespace DentLink.PresentionLayer.Controllers
         public DoctorController(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-            _userManager= userManager;
+            _userManager = userManager;
         }
 
-        // ==========================================
-        // 1. Dashboard Action
-        // ==========================================
+        private async Task<Doctor> GetCurrentDoctorAsync()
+        {
+            var userId = _userManager.GetUserId(User);
+            return await _context.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.UserId == userId);
+        }
+
+       
         public async Task<IActionResult> Dashboard()
         {
-            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == 1);
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound();
 
-            ViewBag.DoctorName = doctor?.User.FullName ?? "Omar Khaled";
-            ViewBag.IsApproved = doctor?.IsApproved ?? false;
+            if (!doctor.IsApproved)
+                return RedirectToAction("PendingApproval", "Account");
 
-            // "Available" = Pending حسب الـ enum عندنا
-            ViewBag.AvailableCasesCount = await _context.Cases.CountAsync(c => c.status == Status.Pending);
-            // "Accepted" = Active حسب الـ enum عندنا
-            ViewBag.AcceptedRequestsCount = await _context.CaseRequests.CountAsync(cr => cr.status == Status.Active);
-            ViewBag.CompletedSessionsCount = await _context.Sessions.CountAsync(s => s.Status == "completed");
+            var availableCasesCount = await _context.Cases.CountAsync(c => c.status == Status.Pending);
 
-            var recentRequests = await _context.SendCaseRequests
-                .Include(s => s.CaseRequest)
-                    .ThenInclude(cr => cr.Case)
-                .OrderByDescending(s => s.CaseRequest.RequestedAt)
-                .Take(3)
-                .ToListAsync();
-            ViewBag.RecentRequests = recentRequests;
+            var acceptedRequestsCount = await _context.SendCaseRequests
+                .CountAsync(s => s.DoctorId == doctor.Id && s.CaseRequest.status == Status.Active);
 
             var upcomingSessions = await _context.Sessions
-                .Include(s => s.CaseRequest)
-                    .ThenInclude(cr => cr.Case)
-                        .ThenInclude(c => c.Patient)
-                .Where(s => s.Status != "completed")
-                .OrderBy(s => s.SessionStart) // كان SessionDate وهي مش موجودة
-                .Take(3)
+                .Include(s => s.CaseRequest).ThenInclude(cr => cr.Case).ThenInclude(c => c.Patient).ThenInclude(p => p.User)
+                .Where(s => s.CaseRequest.SendCaseRequests.Any(sc => sc.DoctorId == doctor.Id) && s.SessionEnd == null)
+                .OrderBy(s => s.SessionStart)
                 .ToListAsync();
 
-            return View(upcomingSessions);
+            var completedSessions = await _context.Sessions
+                .Include(s => s.CaseRequest)
+                .Where(s => s.CaseRequest.SendCaseRequests.Any(sc => sc.DoctorId == doctor.Id) && s.SessionEnd != null)
+                .OrderByDescending(s => s.SessionEnd)
+                .ToListAsync();
+
+            var recentRequests = await _context.SendCaseRequests
+                .Include(s => s.CaseRequest).ThenInclude(cr => cr.Case).ThenInclude(c => c.Patient).ThenInclude(p => p.User)
+                .Where(s => s.DoctorId == doctor.Id)
+                .OrderByDescending(s => s.CaseRequest.RequestedAt)
+                .Take(5)
+                .ToListAsync();
+
+            var recentActivity = recentRequests.Select(r =>
+            {
+                string statusText = r.CaseRequest.status switch
+                {
+                    Status.Active => "was accepted",
+                    Status.Cancelled => "was rejected",
+                    _ => "is pending review"
+                };
+                return new RecentActivityDto
+                {
+                    Message = $"Your request for {r.CaseRequest.Case?.Patient?.User?.FullName ?? "a patient"} {statusText}",
+                    Timestamp = r.CaseRequest.RequestedAt
+                };
+            }).ToList();
+
+            var dashboardData = new DoctorDashboardDto
+            {
+                AvailableCasesCount = availableCasesCount,
+                MatchingSpecializationCount = availableCasesCount,
+                AcceptedRequestsCount = acceptedRequestsCount,
+                UpcomingSessionsCount = upcomingSessions.Count,
+                CompletedSessionsCount = completedSessions.Count,
+                LastCompletedSessionDate = completedSessions.FirstOrDefault()?.SessionEnd,
+                RecentActivity = recentActivity,
+                UpcomingSessions = upcomingSessions.Take(3).Select(s => new UpcomingSessionDto
+                {
+                    SessionId = s.Id,
+                    PatientName = s.CaseRequest?.Case?.Patient?.User?.FullName ?? "Unknown",
+                    CaseType = s.CaseRequest?.Case?.Typies.ToString(),
+                    SessionStart = s.SessionStart,
+                    Status = s.PatientArrived ? "in-progress" : "confirmed"
+                }).ToList()
+            };
+
+            ViewBag.DoctorName = doctor.User?.FullName;
+            return View("~/Views/student/student-dashboard.cshtml", dashboardData);
         }
 
-        // ==========================================
-        // 2. Under Review Action
-        // ==========================================
-        public IActionResult UnderReview()
-        {
-            return View();
-        }
-
-        // ==========================================
-        // 3. Available Cases Action
-        // ==========================================
         public async Task<IActionResult> AvailableCases(string searchQuery, string selectedType)
         {
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound();
+            if (!doctor.IsApproved) return RedirectToAction("PendingApproval", "Account");
+
             var casesQuery = _context.Cases
-                .Include(c => c.Patient)
+                .Include(c => c.Patient).ThenInclude(p => p.User)
                 .Where(c => c.status == Status.Pending)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                string searchLower = searchQuery.ToLower().Trim();
-
+                string s = searchQuery.ToLower().Trim();
                 casesQuery = casesQuery.Where(c =>
-                    c.Typies.ToString().ToLower().Contains(searchLower) ||
-                    c.Description.ToLower().Contains(searchLower)
-                );
+                    c.Typies.ToString().ToLower().Contains(s) ||
+                    c.Description.ToLower().Contains(s));
             }
 
             if (!string.IsNullOrEmpty(selectedType) && selectedType != "All")
             {
                 if (Enum.TryParse<Typies>(selectedType, out var typeEnum))
-                {
                     casesQuery = casesQuery.Where(c => c.Typies == typeEnum);
-                }
             }
 
-            var availableCases = await casesQuery
-                .OrderByDescending(c => c.CreatedAt)
+            var cases = await casesQuery.OrderByDescending(c => c.CreatedAt).ToListAsync();
+
+            var requestedCaseIds = await _context.SendCaseRequests
+                .Where(s => s.DoctorId == doctor.Id)
+                .Select(s => s.CaseRequest.CaseId)
                 .ToListAsync();
 
-            ViewBag.CurrentSearch = searchQuery;
-            ViewBag.CurrentType = string.IsNullOrEmpty(selectedType) ? "All" : selectedType;
+            var dto = cases.Select(c => new AvailableCaseDto
+            {
+                CaseId = c.Id,
+                Type = c.Typies.ToString(),
+                Description = c.Description,
+                ImageUrl = c.ImageUrl,
+                PatientName = c.Patient?.User?.FullName ?? "Unknown",
+                PatientAddress = c.Patient?.Address,
+                CreatedAt = c.CreatedAt,
+                AlreadyRequested = requestedCaseIds.Contains(c.Id)
+            }).ToList();
 
-            return View(availableCases);
+            ViewBag.DoctorName = doctor.User?.FullName;
+            return View("~/Views/student/available-cases.cshtml", dto);
         }
 
-        // --- أكشن حساس: يحتاج موافقة الأدمن ---
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendRequest(int caseId, decimal transportCost)
         {
-            int currentDoctorId = 1;
-
-            var doctor = await _context.Doctors.FindAsync(currentDoctorId);
-            if (doctor == null || !doctor.IsApproved)
-            {
-                return RedirectToAction(nameof(UnderReview));
-            }
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound();
+            if (!doctor.IsApproved) return RedirectToAction("PendingApproval", "Account");
 
             bool alreadyRequested = await _context.SendCaseRequests
-                .AnyAsync(s => s.DoctorId == currentDoctorId && s.CaseRequest.CaseId == caseId);
+                .AnyAsync(s => s.DoctorId == doctor.Id && s.CaseRequest.CaseId == caseId);
 
             if (alreadyRequested)
             {
+                TempData["ErrorMessage"] = "You already sent a request for this case.";
+                return RedirectToAction(nameof(AvailableCases));
+            }
+
+            var targetCase = await _context.Cases.FindAsync(caseId);
+            if (targetCase == null || targetCase.status != Status.Pending)
+            {
+                TempData["ErrorMessage"] = "This case is no longer available.";
                 return RedirectToAction(nameof(AvailableCases));
             }
 
             var newRequest = new CaseRequest
             {
                 CaseId = caseId,
-                status = Status.Pending, // كانت "pending" (string)
+                status = Status.Pending,
                 TransportCost = transportCost,
                 RequestedAt = DateTime.UtcNow
             };
             _context.CaseRequests.Add(newRequest);
             await _context.SaveChangesAsync();
 
-            var doctorRequestLink = new SendCaseRequest
+            _context.SendCaseRequests.Add(new SendCaseRequest
             {
-                DoctorId = currentDoctorId,
+                DoctorId = doctor.Id,
                 CaseRequestId = newRequest.Id
-            };
-            _context.SendCaseRequests.Add(doctorRequestLink);
+            });
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(AvailableCases));
+            TempData["SuccessMessage"] = "Your request has been sent successfully!";
+            return RedirectToAction(nameof(MyRequests));
         }
 
-        // ==========================================
-        // 4. Sessions Action
-        // ==========================================
-        public async Task<IActionResult> Sessions()
+        public async Task<IActionResult> MyRequests()
         {
-            int currentDoctorId = 1;
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound();
 
-            var doctorSessions = await _context.Sessions
-                .Include(s => s.CaseRequest)
-                    .ThenInclude(cr => cr.Case)
-                        .ThenInclude(c => c.Patient)
-                .Where(session => session.CaseRequest.SendCaseRequests.Any(s => s.DoctorId == currentDoctorId))
-                .OrderByDescending(session => session.SessionStart) // كان session.st (خطأ إملائي)
+            var myRequests = await _context.SendCaseRequests
+                .Include(s => s.CaseRequest).ThenInclude(cr => cr.Case).ThenInclude(c => c.Patient).ThenInclude(p => p.User)
+                .Where(s => s.DoctorId == doctor.Id)
+                .OrderByDescending(s => s.CaseRequest.RequestedAt)
+                .Select(s => new MyRequestDto
+                {
+                    CaseRequestId = s.CaseRequestId,
+                    CaseId = s.CaseRequest.CaseId,
+                    CaseType = s.CaseRequest.Case.Typies.ToString(),
+                    PatientName = s.CaseRequest.Case.Patient.User.FullName,
+                    PatientAddress = s.CaseRequest.Case.Patient.Address,
+                    TransportCost = s.CaseRequest.TransportCost,
+                    Status = s.CaseRequest.status.ToString(),
+                    RequestedAt = s.CaseRequest.RequestedAt
+                })
                 .ToListAsync();
 
-            return View(doctorSessions);
+            ViewBag.DoctorName = doctor.User?.FullName;
+            return View("~/Views/student/my-requests.cshtml", myRequests);
         }
 
-        // --- أكشن حساس: يحتاج موافقة الأدمن ---
+        public async Task<IActionResult> Sessions()
+        {
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound();
+
+            var sessions = await _context.Sessions
+                .Include(s => s.CaseRequest).ThenInclude(cr => cr.Case).ThenInclude(c => c.Patient).ThenInclude(p => p.User)
+                .Where(s => s.CaseRequest.SendCaseRequests.Any(sc => sc.DoctorId == doctor.Id))
+                .OrderByDescending(s => s.SessionStart)
+                .Select(s => new DoctorSessionDto
+                {
+                    SessionId = s.Id,
+                    CaseRequestId = s.CaseRequestId,
+                    PatientName = s.CaseRequest.Case.Patient.User.FullName,
+                    CaseType = s.CaseRequest.Case.Typies.ToString(),
+                    SessionStart = s.SessionStart,
+                    SessionEnd = s.SessionEnd,
+                    PatientArrived = s.PatientArrived,
+                    Status = s.SessionEnd != null ? "completed" : (s.PatientArrived ? "in progress" : "confirmed")
+                })
+                .ToListAsync();
+
+            ViewBag.DoctorName = doctor.User?.FullName;
+            return View("~/Views/student/sessions.cshtml", sessions);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmArrival(int sessionId)
         {
-            int currentDoctorId = 1;
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound();
 
-            var doctor = await _context.Doctors.FindAsync(currentDoctorId);
-            if (doctor == null || !doctor.IsApproved)
-            {
-                return RedirectToAction(nameof(UnderReview));
-            }
+            var session = await _context.Sessions
+                .Include(s => s.CaseRequest).ThenInclude(cr => cr.SendCaseRequests)
+                .FirstOrDefaultAsync(s => s.Id == sessionId);
 
-            var session = await _context.Sessions.FindAsync(sessionId);
-            if (session != null)
-            {
-                session.PatientArrived = true; // كانت IsPatientArrived (مش موجودة)
-                session.Status = "in progress";
-                session.ActualStartTime = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
-            }
+            if (session == null || !session.CaseRequest.SendCaseRequests.Any(sc => sc.DoctorId == doctor.Id))
+                return NotFound();
+
+            session.PatientArrived = true;
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Sessions));
         }
 
-        // --- أكشن حساس: يحتاج موافقة الأدمن ---
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CompleteSession(int sessionId)
         {
-            int currentDoctorId = 1;
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound();
 
-            var doctor = await _context.Doctors.FindAsync(currentDoctorId);
-            if (doctor == null || !doctor.IsApproved)
-            {
-                return RedirectToAction(nameof(UnderReview));
-            }
+            var session = await _context.Sessions
+                .Include(s => s.CaseRequest).ThenInclude(cr => cr.SendCaseRequests)
+                .Include(s => s.CaseRequest.Case)
+                .FirstOrDefaultAsync(s => s.Id == sessionId);
 
-            var session = await _context.Sessions.FindAsync(sessionId);
-            if (session != null)
-            {
-                session.Status = "completed"; // شالينا IsCompleted (مش موجودة)
-                session.ActualEndTime = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
-            }
+            if (session == null || !session.CaseRequest.SendCaseRequests.Any(sc => sc.DoctorId == doctor.Id))
+                return NotFound();
+
+            session.SessionEnd = DateTime.UtcNow;
+
+            if (session.CaseRequest.Case != null)
+                session.CaseRequest.Case.status = Status.Completed;
+
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Sessions));
         }
-
-        // ==========================================
-        // 5. Profile Actions
-        // ==========================================
 
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
-            var doctor = await _context.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == 1);
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound();
 
-            if (doctor == null)
+            var dto = new DoctorProfileDto
             {
-                
-                var user = new ApplicationUser
-                {
-                    FullName = "Omar Khaled",
-                    Email = "omar.k@cu.edu.eg",
-                    UserName = "omar.k@cu.edu.eg" 
-                };
+                Id = doctor.Id,
+                FullName = doctor.User?.FullName,
+                University = doctor.University,
+                Faculty = doctor.Department,
+                Phone = doctor.User?.PhoneNumber,
+                AcademicYear = doctor.AcademicYear,
+                IdCardUrl = doctor.IdCardUrl,
+                IsApproved = doctor.IsApproved,
+                ApprovalDate = doctor.ApprovalDate
+            };
 
-                var result = await _userManager.CreateAsync(user, "P@ssw0rd123"); 
+            ViewBag.ProfilePicture = doctor.ProfilePicture;
+            ViewBag.Email = doctor.User?.Email;
 
-                if (!result.Succeeded)
-                {
-                    
-                    foreach (var error in result.Errors)
-                        ModelState.AddModelError("", error.Description);
-
-                    return View();
-                }
-                
-                doctor = new Doctor
-                {
-                    UserId = user.Id,
-                    University = "Cairo University"
-                };
-
-                _context.Doctors.Add(doctor);
-                await _context.SaveChangesAsync();
-            }
-
-            return View(doctor);
+            return View("~/Views/student/profile.cshtml", dto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateProfile(Doctor updatedDoctor, IFormFile? ProfilePictureFile)
+        public async Task<IActionResult> UpdateProfile(UpdateDoctorProfileDto model, IFormFile? ProfilePictureFile)
         {
-            var doctorInDb = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == updatedDoctor.Id);
-            if (doctorInDb == null) return NotFound();
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound();
 
             if (ProfilePictureFile != null && ProfilePictureFile.Length > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "images", "profiles");
                 if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(ProfilePictureFile.FileName);
+                var uniqueFileName = $"{doctor.Id}_{Guid.NewGuid()}_{Path.GetFileName(ProfilePictureFile.FileName)}";
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -270,18 +333,21 @@ namespace DentLink.PresentionLayer.Controllers
                     await ProfilePictureFile.CopyToAsync(fileStream);
                 }
 
-                doctorInDb.ProfilePicture = "/images/" + uniqueFileName;
+                doctor.ProfilePicture = $"/assets/images/profiles/{uniqueFileName}";
             }
 
-            doctorInDb.User.FullName = updatedDoctor.User.FullName;
-            doctorInDb.University = updatedDoctor.University;
-            doctorInDb.Department = updatedDoctor.Department;
-            doctorInDb.AcademicYear = updatedDoctor.AcademicYear;
-            doctorInDb.IdCardUrl = updatedDoctor.IdCardUrl;
+            if (doctor.User != null)
+            {
+                doctor.User.FullName = model.FullName;
+                doctor.User.PhoneNumber = model.Phone;
+            }
+            doctor.University = model.University;
+            doctor.Department = model.Faculty;
+            doctor.AcademicYear = model.AcademicYear;
 
-            _context.Doctors.Update(doctorInDb);
             await _context.SaveChangesAsync();
 
+            TempData["SuccessMessage"] = "Profile updated successfully!";
             return RedirectToAction(nameof(Profile));
         }
     }

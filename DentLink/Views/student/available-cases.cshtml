@@ -1,243 +1,143 @@
-﻿<!DOCTYPE html>
+﻿@model List<DentLink.BusinessLogicLayer.DTOs.Doctordtos.AvailableCaseDto>
+@{
+    Layout = null;
+    var doctorName = ViewBag.DoctorName as string ?? "Student";
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Available Cases - DentLink</title>
-  <link rel="stylesheet" href="../assets/css/student-dashboard.css">
-  <link rel="stylesheet" href="../assets/css/responsive.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Cases - DentLink</title>
+    <link rel="stylesheet" href="~/assets/css/student-dashboard.css">
+    <link rel="stylesheet" href="~/assets/css/responsive.css">
 </head>
 <body>
-  <div class="student-dashboard">
-    <!-- Sidebar -->
-    <aside class="student-sidebar">
-      <div class="student-sidebar-header">
-        <a href="student-dashboard.html" class="student-logo">
-          Dent<span>Link</span> 
-        </a>
-        <span class="student-role-badge">DENTAL STUDENT</span>
-      </div>
-
-      <nav class="student-nav">
-        <a href="student-dashboard.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          Dashboard
-        </a>
-        <a href="available-cases.html" class="active">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-          Available Cases
-        </a>
-        <a href="my-requests.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          My Requests
-        </a>
-        <a href="sessions.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Sessions
-        </a>
-        <a href="profile.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Profile
-        </a>
-      </nav>
-
-      <div class="student-sidebar-footer">
-        <div class="student-user-card">
-          <img src="https://i.pravatar.cc/72?img=12" alt="Omar Khaled" class="student-user-avatar">
-          <div class="student-user-info">
-            <div class="student-user-name">Omar Khaled</div>
-            <div class="student-user-role">Dental Student</div>
-          </div>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <a href="../auth/login.html" class="student-logout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          Logout
-        </a>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <div class="student-main">
-      <header class="student-topbar">
-        <span class="student-topbar-title">Cases</span>
-        <div class="student-topbar-actions">
-          <button class="student-notif-btn" aria-label="Notifications">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-            <span class="student-notif-dot"></span>
-          </button>
-          <img src="https://i.pravatar.cc/72?img=12" alt="Omar Khaled" class="student-topbar-avatar">
-        </div>
-      </header>
-
-      <div class="student-content">
-        <div class="cases-page-header">
-          <h1>Available Cases</h1>
-          <p>Browse open dental cases and send your request.</p>
-        </div>
-
-        <!-- Search & Filter -->
-        <div class="cases-toolbar">
-          <div class="cases-search">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="casesSearch" placeholder="Search by type, location...">
-          </div>
-          <button class="cases-filter-btn" aria-label="Filter">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-          </button>
-        </div>
-
-        <div class="cases-chips">
-          <button class="cases-chip active" data-filter="all">All</button>
-          <button class="cases-chip" data-filter="filling">Filling</button>
-          <button class="cases-chip" data-filter="extraction">Extraction</button>
-          <button class="cases-chip" data-filter="cleaning">Cleaning</button>
-          <button class="cases-chip" data-filter="root-canal">Root Canal</button>
-          <button class="cases-chip" data-filter="orthodontics">Orthodontics</button>
-          <button class="cases-chip" data-filter="whitening">Whitening</button>
-        </div>
-
-        <!-- Cases Grid -->
-        <div class="cases-grid">
-          <article class="case-card" data-category="filling">
-            <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=600&q=80" alt="Filling case" class="case-card-image">
-            <div class="case-card-body">
-              <div class="case-card-meta">
-                <span class="case-card-tag">Filling</span>
-                <span class="case-card-date">Jun 19, 2024</span>
-              </div>
-              <div class="case-card-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Nasr City, Cairo
-              </div>
-              <p class="case-card-desc">Patient needs a composite filling on lower left molar. Mild sensitivity reported for 2 weeks.</p>
-              <div class="case-card-actions">
-                <button class="case-btn-details">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  Details
-                </button>
-                <button class="case-btn-request">Send Request</button>
-              </div>
+    <div class="student-dashboard">
+        <aside class="student-sidebar">
+            <div class="student-sidebar-header">
+                <a href="@Url.Action("Dashboard", "Doctor")" class="student-logo">Dent<span>Link</span></a>
+                <span class="student-role-badge">DENTAL STUDENT</span>
             </div>
-          </article>
 
-          <article class="case-card" data-category="extraction">
-            <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=600&q=80" alt="Extraction case" class="case-card-image">
-            <div class="case-card-body">
-              <div class="case-card-meta">
-                <span class="case-card-tag">Extraction</span>
-                <span class="case-card-date">Jun 18, 2024</span>
-              </div>
-              <div class="case-card-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Maadi, Cairo
-              </div>
-              <p class="case-card-desc">Wisdom tooth extraction needed. X-rays available. Patient prefers morning sessions.</p>
-              <div class="case-card-actions">
-                <button class="case-btn-details">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  Details
-                </button>
-                <button class="case-btn-request">Send Request</button>
-              </div>
+            <nav class="student-nav">
+                <a href="@Url.Action("Dashboard", "Doctor")">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
+                    Dashboard
+                </a>
+                <a href="@Url.Action("AvailableCases", "Doctor")" class="active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+                    Available Cases
+                </a>
+                <a href="@Url.Action("MyRequests", "Doctor")">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg>
+                    My Requests
+                </a>
+                <a href="@Url.Action("Sessions", "Doctor")">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+                    Sessions
+                </a>
+                <a href="@Url.Action("Profile", "Doctor")">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+                    Profile
+                </a>
+            </nav>
+
+            <div class="student-sidebar-footer">
+                <div class="student-user-card">
+                    <img src="https://i.pravatar.cc/72?img=12" alt="@doctorName" class="student-user-avatar">
+                    <div class="student-user-info">
+                        <div class="student-user-name">@doctorName</div>
+                        <div class="student-user-role">Dental Student</div>
+                    </div>
+                </div>
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="student-logout" style="background:none;border:none;width:100%;cursor:pointer;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+                        Logout
+                    </button>
+                </form>
             </div>
-          </article>
+        </aside>
 
-          <article class="case-card" data-category="cleaning">
-            <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=600&q=80" alt="Cleaning case" class="case-card-image">
-            <div class="case-card-body">
-              <div class="case-card-meta">
-                <span class="case-card-tag">Cleaning</span>
-                <span class="case-card-date">Jun 17, 2024</span>
-              </div>
-              <div class="case-card-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Heliopolis, Cairo
-              </div>
-              <p class="case-card-desc">Routine dental cleaning and scaling. No major issues. Flexible schedule on weekends.</p>
-              <div class="case-card-actions">
-                <button class="case-btn-details">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  Details
-                </button>
-                <button class="case-btn-request">Send Request</button>
-              </div>
+        <div class="student-main">
+            <header class="student-topbar">
+                <span class="student-topbar-title">Cases</span>
+            </header>
+
+            <div class="student-content">
+                <div class="cases-page-header">
+                    <h1>Available Cases</h1>
+                    <p>Browse open dental cases and send your request.</p>
+                </div>
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <p style="color:#dc2626;font-size:12px;font-weight:600;margin-bottom:1rem;">@TempData["ErrorMessage"]</p>
+                }
+
+                <div class="cases-toolbar">
+                    <div class="cases-search">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                        <input type="text" id="casesSearch" placeholder="Search by type, patient...">
+                    </div>
+                </div>
+
+                <div class="cases-chips">
+                    <button class="cases-chip active" data-filter="all">All</button>
+                    <button class="cases-chip" data-filter="filling">Filling</button>
+                    <button class="cases-chip" data-filter="cleaning">Cleaning</button>
+                    <button class="cases-chip" data-filter="extraction">Extraction</button>
+                    <button class="cases-chip" data-filter="rootcanal">Root Canal</button>
+                    <button class="cases-chip" data-filter="orthodontics">Orthodontics</button>
+                    <button class="cases-chip" data-filter="pedodontics">Pedodontics</button>
+                </div>
+
+                <div class="cases-grid">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var c in Model)
+                        {
+                            var category = c.Type.Replace(" ", "").ToLower();
+                            <article class="case-card" data-category="@category">
+                                <img src="@(string.IsNullOrEmpty(c.ImageUrl) ? "/assets/images/default-case.jpg" : c.ImageUrl)" alt="@c.Type case" class="case-card-image">
+                                <div class="case-card-body">
+                                    <div class="case-card-meta">
+                                        <span class="case-card-tag">@c.Type</span>
+                                        <span class="case-card-date">@c.CreatedAt.ToString("MMM d, yyyy")</span>
+                                    </div>
+                                    <div class="case-card-location">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                                        @c.PatientAddress
+                                    </div>
+                                    <p class="case-card-desc">@c.Description</p>
+                                    <div class="case-card-actions">
+                                        @if (c.AlreadyRequested)
+                                        {
+                                            <span class="case-btn-details" style="cursor:default;">Already requested</span>
+                                        }
+                                        else
+                                        {
+                                            <form asp-controller="Doctor" asp-action="SendRequest" method="post" style="flex:1;display:flex;gap:0.6rem;">
+                                                <input type="hidden" name="caseId" value="@c.CaseId" />
+                                                <input type="number" name="transportCost" placeholder="Transport EGP" min="0" step="0.01" required
+                                                       style="width:110px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.75rem;padding:0 0.5rem;" />
+                                                <button type="submit" class="case-btn-request">Send Request</button>
+                                            </form>
+                                        }
+                                    </div>
+                                </div>
+                            </article>
+                        }
+                    }
+                </div>
+
+                <p class="cases-empty" id="casesEmpty">No cases match your search. Try a different filter.</p>
             </div>
-          </article>
-
-          <article class="case-card" data-category="root-canal">
-            <img src="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=600&q=80" alt="Root canal case" class="case-card-image">
-            <div class="case-card-body">
-              <div class="case-card-meta">
-                <span class="case-card-tag">Root Canal</span>
-                <span class="case-card-date">Jun 16, 2024</span>
-              </div>
-              <div class="case-card-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Zamalek, Cairo
-              </div>
-              <p class="case-card-desc">Root canal treatment on upper premolar. Severe pain when chewing. Prior consultation done.</p>
-              <div class="case-card-actions">
-                <button class="case-btn-details">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  Details
-                </button>
-                <button class="case-btn-request">Send Request</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="case-card" data-category="orthodontics">
-            <img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=600&q=80" alt="Orthodontics case" class="case-card-image">
-            <div class="case-card-body">
-              <div class="case-card-meta">
-                <span class="case-card-tag">Orthodontics</span>
-                <span class="case-card-date">Jun 15, 2024</span>
-              </div>
-              <div class="case-card-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                6th October, Giza
-              </div>
-              <p class="case-card-desc">Initial orthodontic assessment for mild crowding. Patient interested in braces under supervision.</p>
-              <div class="case-card-actions">
-                <button class="case-btn-details">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  Details
-                </button>
-                <button class="case-btn-request">Send Request</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="case-card" data-category="whitening">
-            <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&q=80" alt="Whitening case" class="case-card-image">
-            <div class="case-card-body">
-              <div class="case-card-meta">
-                <span class="case-card-tag">Whitening</span>
-                <span class="case-card-date">Jun 14, 2024</span>
-              </div>
-              <div class="case-card-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Dokki, Giza
-              </div>
-              <p class="case-card-desc">Teeth whitening procedure requested. Good oral hygiene. No sensitivity history reported.</p>
-              <div class="case-card-actions">
-                <button class="case-btn-details">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  Details
-                </button>
-                <button class="case-btn-request">Send Request</button>
-              </div>
-            </div>
-          </article>
-
-          <p class="cases-empty" id="casesEmpty">No cases match your search. Try a different filter.</p>
         </div>
-      </div>
     </div>
-  </div>
 
-  <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/student.js"></script>
+    <script src="~/assets/js/main.js"></script>
+    <script src="~/assets/js/student.js"></script>
 </body>
 </html>

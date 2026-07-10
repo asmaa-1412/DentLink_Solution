@@ -1,115 +1,122 @@
-﻿<!DOCTYPE html>
+﻿@model DentLink.BusinessLogicLayer.DTOs.Doctordtos.DoctorProfileDto
+@{
+    Layout = null;
+    var email = ViewBag.Email as string ?? "";
+    var picture = ViewBag.ProfilePicture as string;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Profile - DentLink</title>
-  <link rel="stylesheet" href="../assets/css/student-dashboard.css">
-  <link rel="stylesheet" href="../assets/css/responsive.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - DentLink</title>
+    <link rel="stylesheet" href="~/assets/css/student-dashboard.css">
+    <link rel="stylesheet" href="~/assets/css/responsive.css">
 </head>
 <body>
-  <div class="student-dashboard">
-    <aside class="student-sidebar">
-      <div class="student-sidebar-header">
-        <a href="student-dashboard.html" class="student-logo">
-          Dent<span>Link</span> 
-        </a>
-        <span class="student-role-badge">DENTAL STUDENT</span>
-      </div>
-      <nav class="student-nav">
-        <a href="student-dashboard.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          Dashboard
-        </a>
-        <a href="available-cases.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-          Available Cases
-        </a>
-        <a href="my-requests.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          My Requests
-        </a>
-        <a href="sessions.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Sessions
-        </a>
-        <a href="profile.html" class="active">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Profile
-        </a>
-      </nav>
-      <div class="student-sidebar-footer">
-        <div class="student-user-card">
-          <img src="https://i.pravatar.cc/72?img=12" alt="Omar Khaled" class="student-user-avatar">
-          <div class="student-user-info">
-            <div class="student-user-name">Omar Khaled</div>
-            <div class="student-user-role">Dental Student</div>
-          </div>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <a href="../auth/login.html" class="student-logout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          Logout
-        </a>
-      </div>
-    </aside>
+    <div class="student-dashboard">
+        <aside class="student-sidebar">
+            <div class="student-sidebar-header">
+                <a href="@Url.Action("Dashboard", "Doctor")" class="student-logo">Dent<span>Link</span></a>
+                <span class="student-role-badge">DENTAL STUDENT</span>
+            </div>
+            <nav class="student-nav">
+                <a href="@Url.Action("Dashboard", "Doctor")">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
+                    Dashboard
+                </a>
+                <a href="@Url.Action("AvailableCases", "Doctor")">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+                    Available Cases
+                </a>
+                <a href="@Url.Action("MyRequests", "Doctor")">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg>
+                    My Requests
+                </a>
+                <a href="@Url.Action("Sessions", "Doctor")">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+                    Sessions
+                </a>
+                <a href="@Url.Action("Profile", "Doctor")" class="active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+                    Profile
+                </a>
+            </nav>
+            <div class="student-sidebar-footer">
+                <div class="student-user-card">
+                    <img src="@(string.IsNullOrEmpty(picture) ? "https://i.pravatar.cc/72?img=12" : picture)" alt="@Model.FullName" class="student-user-avatar">
+                    <div class="student-user-info">
+                        <div class="student-user-name">@Model.FullName</div>
+                        <div class="student-user-role">Dental Student</div>
+                    </div>
+                </div>
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="student-logout" style="background:none;border:none;width:100%;cursor:pointer;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </aside>
 
-    <div class="student-main">
-      <header class="student-topbar">
-        <span class="student-topbar-title">Profile</span>
-        <div class="student-topbar-actions">
-          <button class="student-notif-btn" aria-label="Notifications">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-            <span class="student-notif-dot"></span>
-          </button>
-          <img src="https://i.pravatar.cc/72?img=12" alt="Omar Khaled" class="student-topbar-avatar">
-        </div>
-      </header>
+        <div class="student-main">
+            <header class="student-topbar">
+                <span class="student-topbar-title">Profile</span>
+            </header>
 
-      <div class="student-content">
-        <div class="student-page-header">
-          <h1>My Profile</h1>
-          <p>Manage your student profile and credentials.</p>
-        </div>
+            <div class="student-content">
+                <div class="student-page-header">
+                    <h1>My Profile</h1>
+                    <p>Manage your student profile and credentials.</p>
+                </div>
 
-        <div class="profile-card">
-          <div class="profile-card-header">
-            <img src="https://i.pravatar.cc/72?img=12" alt="Omar Khaled" class="profile-card-avatar">
-            <div>
-              <div class="profile-card-name">Omar Khaled</div>
-              <div class="profile-card-email">omar.khaled@dentlink.com</div>
-              <span class="profile-verified-badge">Verified Student</span>
-            </div>
-          </div>
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <p style="color:#059669;font-size:12px;font-weight:600;margin-bottom:1rem;">@TempData["SuccessMessage"]</p>
+                }
 
-          <form class="profile-form" id="profileForm">
-            <div class="form-group">
-              <label for="fullName">Full Name</label>
-              <input type="text" id="fullName" value="Omar Khaled">
+                <div class="profile-card">
+                    <div class="profile-card-header">
+                        <img src="@(string.IsNullOrEmpty(picture) ? "https://i.pravatar.cc/72?img=12" : picture)" alt="@Model.FullName" class="profile-card-avatar">
+                        <div>
+                            <div class="profile-card-name">@Model.FullName</div>
+                            <div class="profile-card-email">@email</div>
+                            <span class="profile-verified-badge">@(Model.IsApproved ? "Verified Student" : "Pending Verification")</span>
+                        </div>
+                    </div>
+
+                    <form class="profile-form" asp-controller="Doctor" asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="Id" value="@Model.Id" />
+
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" name="FullName" id="fullName" value="@Model.FullName">
+                        </div>
+                        <div class="form-group">
+                            <label for="university">University</label>
+                            <input type="text" name="University" id="university" value="@Model.University">
+                        </div>
+                        <div class="form-group">
+                            <label for="faculty">Faculty</label>
+                            <input type="text" name="Faculty" id="faculty" value="@Model.Faculty">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" name="Phone" id="phone" value="@Model.Phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="academicYear">Academic Year</label>
+                            <input type="text" name="AcademicYear" id="academicYear" value="@Model.AcademicYear">
+                        </div>
+                        <div class="form-group">
+                            <label for="profilePic">Profile Picture</label>
+                            <input type="file" name="ProfilePictureFile" id="profilePic" accept="image/*">
+                        </div>
+                        <button type="submit" class="profile-save-btn">Save Changes</button>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="university">University</label>
-              <input type="text" id="university" value="Cairo University">
-            </div>
-            <div class="form-group">
-              <label for="faculty">Faculty</label>
-              <input type="text" id="faculty" value="Faculty of Dentistry">
-            </div>
-            <div class="form-group">
-              <label for="academicYear">Academic Year</label>
-              <input type="text" id="academicYear" value="4th Year">
-            </div>
-            <div class="form-group">
-              <label for="studentId">Student ID</label>
-              <input type="text" id="studentId" value="20210458">
-            </div>
-            <button type="submit" class="profile-save-btn">Save Changes</button>
-          </form>
         </div>
-      </div>
     </div>
-  </div>
-  <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/student.js"></script>
 </body>
 </html>

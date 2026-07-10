@@ -1,10 +1,6 @@
 // DentLink - Student JS
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.case-btn-request, .request-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      alert('Your request has been sent successfully!');
-      window.location.href = 'my-requests.html';
-    });
+  
   });
 
   const searchInput = document.getElementById('casesSearch');

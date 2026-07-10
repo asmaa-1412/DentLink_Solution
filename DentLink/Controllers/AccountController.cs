@@ -181,6 +181,9 @@ namespace DentLink.PresentionLayer.Controllers
             if (await _userManager.IsInRoleAsync(user, "Patient"))
                 return RedirectToAction("PatientDashboard", "Sessions");
 
+            if (await _userManager.IsInRoleAsync(user, "Student"))
+                return RedirectToAction("Dashboard", "Doctor");
+
             return RedirectToAction("Index", "Home");
         }
 
