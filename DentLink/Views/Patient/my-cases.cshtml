@@ -40,7 +40,7 @@
                 <a href="@Url.Action("Create", "Cases", new { patientId = patientId })" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
                     <i class="fa-solid fa-plus text-sm w-5"></i><span>Add Case</span>
                 </a>
-                <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
+                <a href="@Url.Action("MyRequests", "Requests", new { patientId = patientId })" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
                     <i class="fa-regular fa-envelope text-sm w-5"></i><span>Requests</span>
                 </a>
                 <a href="@Url.Action("Profile", "Patients", new { id = patientId })" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:text-[#2563EB] font-medium text-xs rounded-xl transition">
