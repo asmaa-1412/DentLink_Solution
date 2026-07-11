@@ -21,6 +21,7 @@ namespace DentLink.PresentionLayer.Controllers
             _userManager = userManager;
         }
 
+
         private async Task<Doctor> GetCurrentDoctorAsync()
         {
             var userId = _userManager.GetUserId(User);

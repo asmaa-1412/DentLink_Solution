@@ -76,22 +76,68 @@
                     <p style="color:#dc2626;font-size:12px;font-weight:600;margin-bottom:1rem;">@TempData["ErrorMessage"]</p>
                 }
 
-                <div class="cases-toolbar">
-                    <div class="cases-search">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-                        <input type="text" id="casesSearch" placeholder="Search by type, patient...">
-                    </div>
-                </div>
+                <!-- تغليف البحث والـ Chips داخل فورم واحدة لإرسال البيانات للـ Controller -->
+                <form asp-controller="Doctor" asp-action="AvailableCases" method="get" id="filterForm">
 
-                <div class="cases-chips">
-                    <button class="cases-chip active" data-filter="all">All</button>
-                    <button class="cases-chip" data-filter="filling">Filling</button>
-                    <button class="cases-chip" data-filter="cleaning">Cleaning</button>
-                    <button class="cases-chip" data-filter="extraction">Extraction</button>
-                    <button class="cases-chip" data-filter="rootcanal">Root Canal</button>
-                    <button class="cases-chip" data-filter="orthodontics">Orthodontics</button>
-                    <button class="cases-chip" data-filter="pedodontics">Pedodontics</button>
-                </div>
+                    <div class="cases-toolbar">
+                        <div class="cases-search">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
+                            <!-- ربط مربع البحث بالـ Backend والحفاظ على الكلمة المكتوبة بعد الريفرش -->
+                            <input type="text" name="searchQuery" id="casesSearch"
+                                   value="@Context.Request.Query["searchQuery"]"
+                                   placeholder="Search by type, patient..."
+                                   onchange="this.form.submit();">
+                        </div>
+                    </div>
+
+                    <div class="cases-chips">
+                        <!-- زر الكل -->
+                        <button type="submit" name="selectedType" value="All"
+                                class="cases-chip @(string.IsNullOrEmpty(Context.Request.Query["selectedType"]) || Context.Request.Query["selectedType"] == "All" ? "active" : "")">
+                            All
+                        </button>
+
+                        <!-- زر الحشو -->
+                        <button type="submit" name="selectedType" value="Filling"
+                                class="cases-chip @(Context.Request.Query["selectedType"] == "Filling" ? "active" : "")">
+                            Filling
+                        </button>
+
+                        <!-- زر التنظيف -->
+                        <button type="submit" name="selectedType" value="Cleaning"
+                                class="cases-chip @(Context.Request.Query["selectedType"] == "Cleaning" ? "active" : "")">
+                            Cleaning
+                        </button>
+
+                        <!-- زر الخلع -->
+                        <button type="submit" name="selectedType" value="Extraction"
+                                class="cases-chip @(Context.Request.Query["selectedType"] == "Extraction" ? "active" : "")">
+                            Extraction
+                        </button>
+
+                        <!-- زر علاج الجذور -->
+                        <button type="submit" name="selectedType" value="RootCanal"
+                                class="cases-chip @(Context.Request.Query["selectedType"] == "RootCanal" ? "active" : "")">
+                            Root Canal
+                        </button>
+
+                        <!-- زر التقويم -->
+                        <button type="submit" name="selectedType" value="Orthodontics"
+                                class="cases-chip @(Context.Request.Query["selectedType"] == "Orthodontics" ? "active" : "")">
+                            Orthodontics
+                        </button>
+
+                        <!-- زر أسنان الأطفال -->
+                        <button type="submit" name="selectedType" value="Pedodontics"
+                                class="cases-chip @(Context.Request.Query["selectedType"] == "Pedodontics" ? "active" : "")">
+                            Pedodontics
+                        </button>
+                    </div>
+
+                </form>
 
                 <div class="cases-grid">
                     @if (Model != null && Model.Any())
